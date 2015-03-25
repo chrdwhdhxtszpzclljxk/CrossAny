@@ -1,0 +1,9 @@
+prj.win32/CrossAny.filters
+prj.win32/Debug/
+prj.win32/ipch/
+prj.win32/CrossAnyTest/Debug
+prj.win32/CrossAnyTest/ipch
+prj.win32/CrossAny.opensdf
+*.sdf
+prj.win32/CrossAny.suo
+*.suo
