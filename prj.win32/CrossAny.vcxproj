@@ -88,8 +88,8 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Classes\appbase.cpp" />
-    <ClCompile Include="..\Classes\glview.cpp" />
+    <ClCompile Include="..\Classes\platforms\win32\appbase_win32.cpp" />
+    <ClCompile Include="..\Classes\platforms\win32\glview_win32.cpp" />
     <ClCompile Include="..\Classes\ui\node.cpp" />
     <ClCompile Include="dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
