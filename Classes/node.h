@@ -1,6 +1,6 @@
 #ifndef __CROSSANY_NODE_H_
 #define __CROSSANY_NODE_H_
-#include "../macro.h"
+#include "macro.h"
 
 NS_CROSSANY_BEGIN
 

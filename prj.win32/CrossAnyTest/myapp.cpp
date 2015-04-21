@@ -4,4 +4,4 @@
 
 myapp::myapp(){}
 myapp::~myapp(){}
-void myapp::run(){};
+void myapp::run(){ appbase::run(); };
