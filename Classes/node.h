@@ -2,14 +2,16 @@
 #define __CROSSANY_NODE_H_
 #include "macro.h"
 
-NS_CROSSANY_BEGIN
+//NS_CROSSANY_BEGIN
+namespace crossany{
 
-class CROSSANY_API node{
-public:
-	node();
-	virtual ~node();
-};
+	class CROSSANY_API node{
+	public:
+		node();
+		virtual ~node();
+	};
 
-NS_CROSSANY_END
+}
+//NS_CROSSANY_END
 
 #endif

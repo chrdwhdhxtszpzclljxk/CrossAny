@@ -125,7 +125,7 @@ int DrawGLScene(GLvoid){// 从这里开始进行所有的绘制
 	glVertex3f(0.5f, -1, 0.0f);
 	glEnd();
 */
-	R = gwidth / 2;
+	R = gheight/2;
 	glBegin(GL_POLYGON);//OpenGL要求：指定顶点的命令必须包含在glBegin函数之后，
 	//glEnd函数之前（否则指定的顶点将被忽略）。并由glBegin来指明如何使用这些点
 	//GL_POLYGON表示画多边形（由点连接成多边形）

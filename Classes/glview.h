@@ -3,17 +3,19 @@
 #define __CROSSANY_GLVIEW_H_
 #include "macro.h"
 
-NS_CROSSANY_BEGIN
+//NS_CROSSANY_BEGIN
+namespace crossany{
 
-class CROSSANY_API glview{
-private:
-	glview();
-	~glview();
+	class CROSSANY_API glview{
+	private:
+		glview();
+		~glview();
 
-	virtual bool init(){ return true; };
-public:
-	static glview* me();
-};
+		virtual bool init(){ return true; };
+	public:
+		static glview* me();
+	};
 
-NS_CROSSANY_END
+}
+//NS_CROSSANY_END
 #endif
