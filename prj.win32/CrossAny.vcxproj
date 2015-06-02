@@ -17,7 +17,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -52,12 +52,16 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PRJWIN32_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../Classes</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -84,17 +88,27 @@
     <ClInclude Include="..\Classes\coordinate.h" />
     <ClInclude Include="..\Classes\CrossAny.h" />
     <ClInclude Include="..\Classes\glview.h" />
+    <ClInclude Include="..\Classes\log.h" />
     <ClInclude Include="..\Classes\msg.h" />
     <ClInclude Include="..\Classes\node.h" />
+    <ClInclude Include="..\Classes\platforms\platformsconfig.h" />
+    <ClInclude Include="..\Classes\tls.h" />
+    <ClInclude Include="..\Classes\ui\button.h" />
+    <ClInclude Include="..\Classes\ui\div.h" />
+    <ClInclude Include="..\Classes\ui\img9.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Classes\coordinate.cpp" />
+    <ClCompile Include="..\Classes\log.cpp" />
     <ClCompile Include="..\Classes\msg.cpp" />
     <ClCompile Include="..\Classes\platforms\win32\appbase_win32.cpp" />
     <ClCompile Include="..\Classes\platforms\win32\glview_win32.cpp" />
     <ClCompile Include="..\Classes\platforms\win32\node_win32.cpp" />
+    <ClCompile Include="..\Classes\tls.cpp" />
+    <ClCompile Include="..\Classes\ui\button.cpp" />
+    <ClCompile Include="..\Classes\ui\div.cpp" />
+    <ClCompile Include="..\Classes\ui\img9.cpp" />
     <ClCompile Include="dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

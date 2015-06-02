@@ -1,9 +1,10 @@
-#include "../../appbase.h"
+#include "appbase.h"
 #include <Windows.h>
 #include <stdint.h>
-#include <gl/GL.h>
-#include <gl/GLU.h>
+//#include <gl/GL.h>
+//#include <gl/GLU.h>
 #include <math.h>
+#include "log.h"
 
 
 NS_CROSSANY_BEGIN
@@ -11,7 +12,7 @@ NS_CROSSANY_BEGIN
 // 全局变量: 
 static HINSTANCE hInst;								// 当前实例
 const static TCHAR* szTitle = L"crossany_wnd";					// 标题栏文本
-const static TCHAR* szWindowClass = L"crossany_wnd";			// 主窗口类名
+const static TCHAR* tcWndClass = L"opengl_crossany_wnd1.0";			// 主窗口类名
 
 static BOOL painted = FALSE;
 int64_t frames = 0;
@@ -24,13 +25,13 @@ bool active = TRUE;       // 窗口的活动标志，缺省为TRUE
 bool fullscreen = TRUE;   // 全屏标志缺省设定成全屏模式  
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);// WndProc的定义 
 GLsizei gwidth, gheight;
-
+appbase* pThis = nullptr;
 
 #define NEAR_PLANE    1.0
 #define FAR_PLANE    20.0
 #define FIELD_OF_VIEW    60.0
 
-GLvoid ReSizeGLScene(GLsizei width, GLsizei height){// 重置并初始化GL窗口大小  
+GLvoid ReSizeGLScene(appbase* pThis,GLsizei width, GLsizei height){// 重置并初始化GL窗口大小  
 	GLfloat    fAspectRatio;
 	if (height == 0) height = 1;
 	gwidth = width; gheight = height;
@@ -59,6 +60,7 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height){// 重置并初始化GL窗口大小
 	////gluOrtho2D(0, width, 0, height);
 	////glMatrixMode(GL_MODELVIEW);// 选择模型观察矩阵  
 	//////glLoadIdentity();// 重置模型观察矩阵  
+	pThis->resize(size(width, height));
 }
 int InitGL(GLvoid){// 此处开始对OpenGL进行所有设置  
 	glShadeModel(GL_SMOOTH);// 启用阴影平滑  
@@ -74,7 +76,7 @@ const int n = 100;
 GLfloat R = 250.0f;
 const GLfloat Pi = 3.1415926536f;
 
-int DrawGLScene(GLvoid){// 从这里开始进行所有的绘制  
+int DrawGLScene(appbase* pThis){// 从这里开始进行所有的绘制  
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// 清除屏幕和深度缓存  
 	//glLoadIdentity();// 重置当前的模型观察矩阵  
 	// 增加新的物体  
@@ -125,7 +127,7 @@ int DrawGLScene(GLvoid){// 从这里开始进行所有的绘制
 	glVertex3f(0.5f, -1, 0.0f);
 	glEnd();
 */
-	R = gheight/2;
+	R = (GLfloat)gheight/2;
 	glBegin(GL_POLYGON);//OpenGL要求：指定顶点的命令必须包含在glBegin函数之后，
 	//glEnd函数之前（否则指定的顶点将被忽略）。并由glBegin来指明如何使用这些点
 	//GL_POLYGON表示画多边形（由点连接成多边形）
@@ -135,7 +137,9 @@ int DrawGLScene(GLvoid){// 从这里开始进行所有的绘制
 
 	glEnd();
 
-	OutputDebugString(L"DrawGLScene %d\r\n");// , frames);
+
+	pThis->draw();
+
 	return TRUE;// 一切OK  
 }
 GLvoid KillGLWindow(GLvoid){// 正常销毁窗口  
@@ -156,37 +160,27 @@ GLvoid KillGLWindow(GLvoid){// 正常销毁窗口
 		MessageBox(NULL, L"Could Not Release hWnd.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
 		hWnd = NULL;// 将hWnd设为NULL  
 	}
-	if (!UnregisterClass(L"OpenGL", hInstance)){// 能否注销窗口类  
+	if (!UnregisterClass(tcWndClass, hInstance)){// 能否注销窗口类  
 		MessageBox(NULL, L"Could Not Unregister Class.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
 		hInstance = NULL;// 将hInstance设为NULL  
 	}
 }
 
-BOOL CreateGLWindow(TCHAR* title, int width, int height, int bits, bool fullscreenflag){
-	GLuint PixelFormat;                     // 保存查找匹配的结果  
-	WNDCLASS wc;                            // 窗口类结构  
-	DWORD dwExStyle;                        // 扩展窗口风格  
-	DWORD dwStyle;                          // 窗口风格  
-	RECT WindowRect;                        // 取得矩形的左上角和右下角的坐标值  
-	WindowRect.left = (long)0;                // 将Left设为 0  
-	WindowRect.right = (long)width;       // 将Right设为要求的宽度  
-	WindowRect.top = (long)0;             // 将Top设为 0  
-	WindowRect.bottom = (long)height; // 将Bottom设为要求的高度  
+BOOL CreateGLWindow(appbase* pThis,const TCHAR* title, int width, int height, int bits, bool fullscreenflag){
+	GLuint PixelFormat; RECT rc;          // 保存查找匹配的结果  
+	WNDCLASS wc; DWORD dwExStyle, dwStyle; // 窗口风格  
+	rc.left = rc.top = (long)0; rc.right = (long)width; rc.bottom = (long)height; 
 	fullscreen = fullscreenflag;              // 设置全局全屏标志  
-	hInstance = GetModuleHandle(NULL);                              // 取得窗口的实例  
 	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;      // 移动时重画，并为窗口取得DC  
 	wc.lpfnWndProc = (WNDPROC)WndProc;                         // WndProc处理消息  
-	wc.cbClsExtra = 0;                                                      // 无额外窗口数据  
-	wc.cbWndExtra = 0;                                                      // 无额外窗口数据  
-	wc.hInstance = hInstance;                                           // 设置实例  
+	wc.cbClsExtra = 0; wc.cbWndExtra = 0; wc.hInstance = hInstance = GetModuleHandle(NULL);  // 设置实例  
 	wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);                     // 装入缺省图标  
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);                   // 装入鼠标指针  
-	wc.hbrBackground = NULL;                                                // GL不需要背景  
-	wc.lpszMenuName = NULL;                                             // 不需要菜单  
-	wc.lpszClassName = L"OpenGL";                                        // 设定类名字  
+	wc.hbrBackground = NULL; wc.lpszMenuName = NULL;                                                // GL不需要背景  
+	wc.lpszClassName = tcWndClass;                                        // 设定类名字  
 
 	if (!RegisterClass(&wc)){                                                    // 尝试注册窗口类  
-		MessageBox(NULL, L"Failed To Register The Window Class.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
+		appbase::alert(L"注册窗口类失败");
 		return FALSE;// 退出并返回FALSE  
 	}
 	if (fullscreen){// 要尝试全屏模式吗  
@@ -220,16 +214,16 @@ BOOL CreateGLWindow(TCHAR* title, int width, int height, int bits, bool fullscre
 		dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;   // 扩展窗体风格  
 		dwStyle = WS_OVERLAPPEDWINDOW;                                // 窗体风格  
 	}
-	AdjustWindowRectEx(&WindowRect, dwStyle, FALSE, dwExStyle);// 调整窗口达到真正要求的大小  
+	AdjustWindowRectEx(&rc, dwStyle, FALSE, dwExStyle);// 调整窗口达到真正要求的大小  
 	if (!(hWnd = CreateWindowEx(dwExStyle,           // 扩展窗体风格  
-		L"OpenGL",                                           // 类名字  
+		tcWndClass,                                           // 类名字  
 		title,                                                      // 窗口标题  
 		WS_CLIPSIBLINGS |                                   // 必须的窗体风格属性  
 		WS_CLIPCHILDREN |                                   // 必须的窗体风格属性  
 		dwStyle,                                                    // 选择的窗体属性  
 		0, 0,                                                        // 窗口位置  
-		WindowRect.right - WindowRect.left,               // 计算调整好的窗口宽度  
-		WindowRect.bottom - WindowRect.top,           // 计算调整好的窗口高度  
+		rc.right - rc.left,               // 计算调整好的窗口宽度  
+		rc.bottom - rc.top,           // 计算调整好的窗口高度  
 		NULL,                                                       // 无父窗口  
 		NULL,                                                       // 无菜单  
 		hInstance,                                              // 实例  
@@ -284,10 +278,13 @@ BOOL CreateGLWindow(TCHAR* title, int width, int height, int bits, bool fullscre
 		MessageBox(NULL, L"Can't Activate The GL Rendering Context.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
 		return FALSE;// 返回 FALSE  
 	}
+
+	const char* ver = (char*)glGetString(GL_VERSION);
+
 	ShowWindow(hWnd, SW_SHOW);       // 显示窗口  
 	SetForegroundWindow(hWnd);      // 略略提高优先级  
 	SetFocus(hWnd);                         // 设置键盘的焦点至此窗口  
-	ReSizeGLScene(width, height);       // 设置透视 GL 屏幕  
+	ReSizeGLScene(pThis,width, height);       // 设置透视 GL 屏幕  
 	if (!InitGL()){// 初始化新建的GL窗口  
 		KillGLWindow();// 重置显示区  
 		MessageBox(NULL, L"Initialization Failed.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
@@ -321,6 +318,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {  
 	case WM_KEYDOWN:{// 有键按下么?  
 		OutputDebugString(L"WM_KEYDOWN\r\n");
 		keys[wParam] = TRUE;// 如果是，设为TRUE  
+		//painted = TRUE;
 		return 0;// 返回  
 	}break;
 	case WM_KEYUP:{// 有键放开么?  
@@ -329,7 +327,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {  
 		return 0;// 返回  
 	}break;
 	case WM_SIZE:{
-		ReSizeGLScene(LOWORD(lParam), HIWORD(lParam));
+		ReSizeGLScene(pThis,LOWORD(lParam), HIWORD(lParam));
 		return 0;
 	}break;
 	}
@@ -337,39 +335,44 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {  
 }
 
 
-appbase::appbase(){}
-appbase::~appbase(){}
+//appbase::appbase(){}
+//appbase::~appbase(){}
 void appbase::run(){
 	MSG msg; BOOL done = FALSE; // 用来退出循环的Bool 变量  
+	pThis = this;
 	// 提示用户选择运行模式  
 	//if (MessageBox(NULL, _T("Would You Like To Run In Fullscreen Mode?"), _T("Start FullScreen?"), MB_YESNO | MB_ICONQUESTION) == IDNO)
 	fullscreen = FALSE; // 窗口模式  
 	// 创建OpenGL窗口  
-	if (!CreateGLWindow(L"NeHe's OpenGL Framework", 640, 480, 16, fullscreen)) return ;// 失败退出  
-	while (!done){// 保持循环直到 done=TRUE  
-		painted = FALSE;
-		if (GetMessage(&msg, NULL, 0, 0) == 0)	break;		// 有消息在等待吗?  
-		if (msg.message == WM_PAINT){ painted = TRUE; }
-		TranslateMessage(&msg); // 翻译消息  
-		DispatchMessage(&msg);  // 发送消息 
-		//OutputDebugString(L"message\r\n");
-		if (active){// 程序激活的么?  		// 绘制场景。监视ESC键和来自DrawGLScene()的退出消息  
-			if (keys[VK_ESCAPE]) done = TRUE;// ESC 按下了么?  // ESC 发出退出信号  
-			else{// 不是退出的时候，刷新屏幕  
-				if (painted){// 如果没有消息 		
-					OutputDebugString(L"Paint\r\n");
-					DrawGLScene();// 绘制场景  
-					frames++;
-					SwapBuffers(hDC);// 交换缓存 (双缓存)  
+	if (!CreateGLWindow(this,szTitle, 640, 480, 16, fullscreen)) return;// 失败退出  
+	if (init()){
+		while (!done){// 保持循环直到 done=TRUE  
+			painted = FALSE;
+			if (GetMessage(&msg, NULL, 0, 0) == 0)	break;		// WM_QUIT 有消息在等待吗?  
+			if (msg.message == WM_PAINT){ painted = TRUE; }
+			TranslateMessage(&msg); // 翻译消息  
+			DispatchMessage(&msg);  // 发送消息 
+			//OutputDebugString(L"message\r\n");
+			if (active){// 程序激活的么?  		// 绘制场景。监视ESC键和来自DrawGLScene()的退出消息  
+				if (keys[VK_ESCAPE]) done = TRUE;// ESC 按下了么?  // ESC 发出退出信号  
+				else{// 不是退出的时候，刷新屏幕  
+					if (painted){// 如果没有消息 		
+						//OutputDebugString(L"Paint\r\n");
+						crossany::log::otprint("painted %d", painted);
+						DrawGLScene(this);// 绘制场景  
+						frames++;
+						SwapBuffers(hDC);// 交换缓存 (双缓存)  
+					}
 				}
 			}
-		}
-		if (keys[VK_F1]){// 允许用户按下F1键在全屏模式和窗口模式间切换  
-			keys[VK_F1] = FALSE;// 若是，使对应的Key数组中的值为 FALSE  
-			KillGLWindow();// 销毁当前的窗口  
-			fullscreen = !fullscreen; // 切换 全屏 / 窗口 模式  
-			// 重建 OpenGL 窗口  
-			if (!CreateGLWindow(L"NeHe's OpenGL Framework", 640, 480, 16, fullscreen))	return ;// 如果窗口未能创建，程序退出  
+			if (keys[VK_F1]){// 允许用户按下F1键在全屏模式和窗口模式间切换  
+				keys[VK_F1] = FALSE;// 若是，使对应的Key数组中的值为 FALSE  
+				KillGLWindow();// 销毁当前的窗口  
+				fullscreen = !fullscreen; // 切换 全屏 / 窗口 模式  
+				// 重建 OpenGL 窗口  
+				if (!CreateGLWindow(this,szTitle, 640, 480, 16, fullscreen))	return;// 如果窗口未能创建，程序退出  
+				painted = TRUE;
+			}
 		}
 	}
 	// 关闭程序  

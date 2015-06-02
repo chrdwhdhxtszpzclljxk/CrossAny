@@ -9,5 +9,7 @@ public:
 	myapp();
 	virtual ~myapp();
 	virtual void run();
+private:
+	virtual bool init();
 };
 

@@ -1,0 +1,13 @@
+#include "img9.h"
+
+NS_CROSSANY_BEGIN
+NS_CROSSANY_UI_BEGIN
+
+img9::img9(){
+}
+
+img9::~img9(){
+}
+
+NS_CROSSANY_UI_END
+NS_CROSSANY_END

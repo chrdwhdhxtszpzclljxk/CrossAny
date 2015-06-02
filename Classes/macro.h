@@ -5,6 +5,11 @@
 #define NS_CROSSANY_END };
 #define USE_NS_CROSSANY using namespace crossany;
 
+#define NS_CROSSANY_UI_BEGIN namespace ui {
+#define NS_CROSSANY_UI_END };
+#define USE_NS_CROSSANY_UI using namespace crossany::ui;
+
+
 #define CROSSANY_EXPORTS
 
 #ifdef CROSSANY_EXPORTS
