@@ -11,7 +11,7 @@ namespace crossany{
 		public:
 			button();
 			~button();
-			virtual void draw();
+			virtual void customdraw();
 
 		};
 	}

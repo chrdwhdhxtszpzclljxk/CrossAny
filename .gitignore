@@ -3,7 +3,16 @@ prj.win32/Debug/
 prj.win32/ipch/
 prj.win32/CrossAnyTest/Debug
 prj.win32/CrossAnyTest/ipch
+third_lib/lpng1617/projects/vstudio/Debug/
+third_lib/lpng1617/projects/vstudio/Release/
+third_lib/lpng1617/projects/vstudio/ipch/
+third_lib/lpng1617/projects/vstudio/libpng/Debug/
+third_lib/lpng1617/projects/vstudio/zlib/Debug/
+
 prj.win32/CrossAny.opensdf
 *.sdf
 prj.win32/CrossAny.suo
 *.suo
+*.ipch
+*.pdb
+*.opensdf

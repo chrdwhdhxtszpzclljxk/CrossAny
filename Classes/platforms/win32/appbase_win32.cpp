@@ -5,6 +5,7 @@
 //#include <gl/GLU.h>
 #include <math.h>
 #include "log.h"
+#include "ui/img9.h"
 
 
 NS_CROSSANY_BEGIN
@@ -42,6 +43,7 @@ GLvoid ReSizeGLScene(appbase* pThis,GLsizei width, GLsizei height){// 重置并初始
 	//gluPerspective(FIELD_OF_VIEW, fAspectRatio,	NEAR_PLANE, FAR_PLANE);
 	//gluOrtho2D(-1, 1, -1, 1);
 	glOrtho(0 - width / 2 , width / 2,0 - height/2, height/2, -1, 1);
+	//glOrtho(-1, 1 , -1, 1, -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	//gluLookAt(0.0f, 0.0f,20, 0.0f, 0.0f, 0, 0.0, 1.0, 0.0);	// Place the camera: // 世界坐标系世界坐标系以屏幕中心为原点(0, 0, 0)。你面对屏幕，你的右边是x正轴，上面是y正轴，屏幕指向你的为z正轴。长度单位这样来定： 窗口范围按此单位恰好是(-1,-1)到(1,1)。
@@ -69,6 +71,7 @@ int InitGL(GLvoid){// 此处开始对OpenGL进行所有设置
 	glEnable(GL_DEPTH_TEST);// 启用深度测试  
 	glDepthFunc(GL_LEQUAL);// 所作深度测试的类型  
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);// 真正精细的透视修正  
+	//glEnable(GL_TEXTURE_2D);
 	return TRUE;// 初始化 OK  
 }
 
