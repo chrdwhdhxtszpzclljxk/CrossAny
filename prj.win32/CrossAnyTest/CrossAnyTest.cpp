@@ -1,4 +1,4 @@
-// CrossAnyTest.cpp : ¶¨ÒåÓ¦ÓÃ³ÌĞòµÄÈë¿Úµã¡£
+// CrossAnyTest.cpp : å®šä¹‰åº”ç”¨ç¨‹åºçš„å…¥å£ç‚¹ã€‚
 //
 
 #include "stdafx.h"
@@ -7,12 +7,12 @@
 
 #define MAX_LOADSTRING 100
 
-// È«¾Ö±äÁ¿: 
-HINSTANCE hInst;								// µ±Ç°ÊµÀı
-TCHAR szTitle[MAX_LOADSTRING];					// ±êÌâÀ¸ÎÄ±¾
-TCHAR szWindowClass[MAX_LOADSTRING];			// Ö÷´°¿ÚÀàÃû
+// å…¨å±€å˜é‡: 
+HINSTANCE hInst;								// å½“å‰å®ä¾‹
+TCHAR szTitle[MAX_LOADSTRING];					// æ ‡é¢˜æ æ–‡æœ¬
+TCHAR szWindowClass[MAX_LOADSTRING];			// ä¸»çª—å£ç±»å
 
-// ´Ë´úÂëÄ£¿éÖĞ°üº¬µÄº¯ÊıµÄÇ°ÏòÉùÃ÷: 
+// æ­¤ä»£ç æ¨¡å—ä¸­åŒ…å«çš„å‡½æ•°çš„å‰å‘å£°æ˜: 
 ATOM				MyRegisterClass(HINSTANCE hInstance);
 BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -28,16 +28,16 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	myapp* papp = new myapp();
 	papp->run();
 	return TRUE;
- 	// TODO:  ÔÚ´Ë·ÅÖÃ´úÂë¡£
+ 	// TODO:  åœ¨æ­¤æ”¾ç½®ä»£ç ã€‚
 	MSG msg;
 	HACCEL hAccelTable;
 
-	// ³õÊ¼»¯È«¾Ö×Ö·û´®
+	// åˆå§‹åŒ–å…¨å±€å­—ç¬¦ä¸²
 	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
 	LoadString(hInstance, IDC_CROSSANYTEST, szWindowClass, MAX_LOADSTRING);
 	MyRegisterClass(hInstance);
 
-	// Ö´ĞĞÓ¦ÓÃ³ÌĞò³õÊ¼»¯: 
+	// æ‰§è¡Œåº”ç”¨ç¨‹åºåˆå§‹åŒ–: 
 	if (!InitInstance (hInstance, nCmdShow))
 	{
 		return FALSE;
@@ -45,7 +45,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_CROSSANYTEST));
 
-	// Ö÷ÏûÏ¢Ñ­»·: 
+	// ä¸»æ¶ˆæ¯å¾ªç¯: 
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
 		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
@@ -61,9 +61,9 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 
 //
-//  º¯Êı:  MyRegisterClass()
+//  å‡½æ•°:  MyRegisterClass()
 //
-//  Ä¿µÄ:  ×¢²á´°¿ÚÀà¡£
+//  ç›®çš„:  æ³¨å†Œçª—å£ç±»ã€‚
 //
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
@@ -87,20 +87,20 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 }
 
 //
-//   º¯Êı:  InitInstance(HINSTANCE, int)
+//   å‡½æ•°:  InitInstance(HINSTANCE, int)
 //
-//   Ä¿µÄ:  ±£´æÊµÀı¾ä±ú²¢´´½¨Ö÷´°¿Ú
+//   ç›®çš„:  ä¿å­˜å®ä¾‹å¥æŸ„å¹¶åˆ›å»ºä¸»çª—å£
 //
-//   ×¢ÊÍ: 
+//   æ³¨é‡Š: 
 //
-//        ÔÚ´Ëº¯ÊıÖĞ£¬ÎÒÃÇÔÚÈ«¾Ö±äÁ¿ÖĞ±£´æÊµÀı¾ä±ú²¢
-//        ´´½¨ºÍÏÔÊ¾Ö÷³ÌĞò´°¿Ú¡£
+//        åœ¨æ­¤å‡½æ•°ä¸­ï¼Œæˆ‘ä»¬åœ¨å…¨å±€å˜é‡ä¸­ä¿å­˜å®ä¾‹å¥æŸ„å¹¶
+//        åˆ›å»ºå’Œæ˜¾ç¤ºä¸»ç¨‹åºçª—å£ã€‚
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    HWND hWnd;
 
-   hInst = hInstance; // ½«ÊµÀı¾ä±ú´æ´¢ÔÚÈ«¾Ö±äÁ¿ÖĞ
+   hInst = hInstance; // å°†å®ä¾‹å¥æŸ„å­˜å‚¨åœ¨å…¨å±€å˜é‡ä¸­
 
    hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
@@ -117,13 +117,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 }
 
 //
-//  º¯Êı:  WndProc(HWND, UINT, WPARAM, LPARAM)
+//  å‡½æ•°:  WndProc(HWND, UINT, WPARAM, LPARAM)
 //
-//  Ä¿µÄ:    ´¦ÀíÖ÷´°¿ÚµÄÏûÏ¢¡£
+//  ç›®çš„:    å¤„ç†ä¸»çª—å£çš„æ¶ˆæ¯ã€‚
 //
-//  WM_COMMAND	- ´¦ÀíÓ¦ÓÃ³ÌĞò²Ëµ¥
-//  WM_PAINT	- »æÖÆÖ÷´°¿Ú
-//  WM_DESTROY	- ·¢ËÍÍË³öÏûÏ¢²¢·µ»Ø
+//  WM_COMMAND	- å¤„ç†åº”ç”¨ç¨‹åºèœå•
+//  WM_PAINT	- ç»˜åˆ¶ä¸»çª—å£
+//  WM_DESTROY	- å‘é€é€€å‡ºæ¶ˆæ¯å¹¶è¿”å›
 //
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -137,7 +137,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		wmId    = LOWORD(wParam);
 		wmEvent = HIWORD(wParam);
-		// ·ÖÎö²Ëµ¥Ñ¡Ôñ: 
+		// åˆ†æèœå•é€‰æ‹©: 
 		switch (wmId)
 		{
 		case IDM_ABOUT:
@@ -152,7 +152,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
-		// TODO:  ÔÚ´ËÌí¼ÓÈÎÒâ»æÍ¼´úÂë...
+		// TODO:  åœ¨æ­¤æ·»åŠ ä»»æ„ç»˜å›¾ä»£ç ...
 		EndPaint(hWnd, &ps);
 		break;
 	case WM_DESTROY:
@@ -164,7 +164,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-// ¡°¹ØÓÚ¡±¿òµÄÏûÏ¢´¦Àí³ÌĞò¡£
+// â€œå…³äºâ€æ¡†çš„æ¶ˆæ¯å¤„ç†ç¨‹åºã€‚
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	UNREFERENCED_PARAMETER(lParam);

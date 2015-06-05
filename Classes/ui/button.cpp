@@ -9,7 +9,7 @@ button::~button(){
 }
 
 void button::customdraw(){
-	GLfloat R = (GLfloat)msize.getw() / 2;
+	GLfloat R = (GLfloat)mrc.getw() / 2;
 	GLfloat Pi = 3.1415926f;
 	int n = 100;
 	glColor3f(1.0f, 1.0f, 0.0f);

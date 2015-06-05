@@ -10,21 +10,21 @@
 
 NS_CROSSANY_BEGIN
 
-// È«¾Ö±äÁ¿: 
-static HINSTANCE hInst;								// µ±Ç°ÊµÀı
-const static TCHAR* szTitle = L"crossany_wnd";					// ±êÌâÀ¸ÎÄ±¾
-const static TCHAR* tcWndClass = L"opengl_crossany_wnd1.0";			// Ö÷´°¿ÚÀàÃû
+// å…¨å±€å˜é‡: 
+static HINSTANCE hInst;								// å½“å‰å®ä¾‹
+const static TCHAR* szTitle = L"crossany_wnd";					// æ ‡é¢˜æ æ–‡æœ¬
+const static TCHAR* tcWndClass = L"opengl_crossany_wnd1.0";			// ä¸»çª—å£ç±»å
 
-static BOOL painted = FALSE;
+
 int64_t frames = 0;
-HGLRC hRC = NULL;     // ÓÀ¾Ã×ÅÉ«ÃèÊö±í  
-HDC hDC = NULL;           // Ë½ÓĞGDIÉè±¸ÃèÊö±í  
-HWND hWnd = NULL;     // ±£´æÎÒÃÇµÄ´°¿Ú¾ä±ú  
-HINSTANCE hInstance;    // ±£´æ³ÌĞòµÄÊµÀı  
-bool keys[256];         // ÓÃÓÚ¼üÅÌÀı³ÌµÄÊı×é  
-bool active = TRUE;       // ´°¿ÚµÄ»î¶¯±êÖ¾£¬È±Ê¡ÎªTRUE  
-bool fullscreen = TRUE;   // È«ÆÁ±êÖ¾È±Ê¡Éè¶¨³ÉÈ«ÆÁÄ£Ê½  
-LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);// WndProcµÄ¶¨Òå 
+HGLRC hRC = NULL;     // æ°¸ä¹…ç€è‰²æè¿°è¡¨  
+HDC hDC = NULL;           // ç§æœ‰GDIè®¾å¤‡æè¿°è¡¨  
+HWND hWnd = NULL;     // ä¿å­˜æˆ‘ä»¬çš„çª—å£å¥æŸ„  
+HINSTANCE hInstance;    // ä¿å­˜ç¨‹åºçš„å®ä¾‹  
+bool keys[256];         // ç”¨äºé”®ç›˜ä¾‹ç¨‹çš„æ•°ç»„  
+bool active = TRUE;       // çª—å£çš„æ´»åŠ¨æ ‡å¿—ï¼Œç¼ºçœä¸ºTRUE  
+bool fullscreen = TRUE;   // å…¨å±æ ‡å¿—ç¼ºçœè®¾å®šæˆå…¨å±æ¨¡å¼  
+LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);// WndProcçš„å®šä¹‰ 
 GLsizei gwidth, gheight;
 appbase* pThis = nullptr;
 
@@ -32,57 +32,61 @@ appbase* pThis = nullptr;
 #define FAR_PLANE    20.0
 #define FIELD_OF_VIEW    60.0
 
-GLvoid ReSizeGLScene(appbase* pThis,GLsizei width, GLsizei height){// ÖØÖÃ²¢³õÊ¼»¯GL´°¿Ú´óĞ¡  
-	GLfloat    fAspectRatio;
+GLvoid ReSizeGLScene(appbase* pThis,GLsizei width, GLsizei height){// é‡ç½®å¹¶åˆå§‹åŒ–GLçª—å£å¤§å°  
+	//GLfloat    fAspectRatio;
 	if (height == 0) height = 1;
 	gwidth = width; gheight = height;
 	glViewport(0, 0, width, height);	// Set the new view port:
 	glMatrixMode(GL_PROJECTION);		// Setup the projection matrix:
 	glLoadIdentity();
-	fAspectRatio = ((GLfloat)width) / ((GLfloat)height);
+	//fAspectRatio = ((GLfloat)width) / ((GLfloat)height);
 	//gluPerspective(FIELD_OF_VIEW, fAspectRatio,	NEAR_PLANE, FAR_PLANE);
 	//gluOrtho2D(-1, 1, -1, 1);
-	glOrtho(0 - width / 2 , width / 2,0 - height/2, height/2, -1, 1);
+	//glOrtho(0 - width / 2 , width / 2,0 - height/2, height/2, -1, 1);
+	glOrtho(0, width , 0 , height , -1, 1); // å–ç¬¬ä¸€è±¡é™åæ ‡æ ‡ç¤ºã€‚
 	//glOrtho(-1, 1 , -1, 1, -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	//gluLookAt(0.0f, 0.0f,20, 0.0f, 0.0f, 0, 0.0, 1.0, 0.0);	// Place the camera: // ÊÀ½ç×ø±êÏµÊÀ½ç×ø±êÏµÒÔÆÁÄ»ÖĞĞÄÎªÔ­µã(0, 0, 0)¡£ÄãÃæ¶ÔÆÁÄ»£¬ÄãµÄÓÒ±ßÊÇxÕıÖá£¬ÉÏÃæÊÇyÕıÖá£¬ÆÁÄ»Ö¸ÏòÄãµÄÎªzÕıÖá¡£³¤¶Èµ¥Î»ÕâÑùÀ´¶¨£º ´°¿Ú·¶Î§°´´Ëµ¥Î»Ç¡ºÃÊÇ(-1,-1)µ½(1,1)¡£
-	//if (height == 0) height = 1;// ·ÀÖ¹±»Áã³ı // ½«HeightÉèÎª1  
-	//glViewport(0, 0, width, height);// ÖØÖÃµ±Ç°µÄÊÓ¿Ú(Viewport)  
-	//glMatrixMode(GL_PROJECTION); //Ñ¡ÔñÍ¶Ó°¾ØÕó
-	//glLoadIdentity();   //ÖØÖÃÍ¶Ó°¾ØÕó
+	//gluLookAt(0.0f, 0.0f,20, 0.0f, 0.0f, 0, 0.0, 1.0, 0.0);	// Place the camera: // ä¸–ç•Œåæ ‡ç³»ä¸–ç•Œåæ ‡ç³»ä»¥å±å¹•ä¸­å¿ƒä¸ºåŸç‚¹(0, 0, 0)ã€‚ä½ é¢å¯¹å±å¹•ï¼Œä½ çš„å³è¾¹æ˜¯xæ­£è½´ï¼Œä¸Šé¢æ˜¯yæ­£è½´ï¼Œå±å¹•æŒ‡å‘ä½ çš„ä¸ºzæ­£è½´ã€‚é•¿åº¦å•ä½è¿™æ ·æ¥å®šï¼š çª—å£èŒƒå›´æŒ‰æ­¤å•ä½æ°å¥½æ˜¯(-1,-1)åˆ°(1,1)ã€‚
+	//if (height == 0) height = 1;// é˜²æ­¢è¢«é›¶é™¤ // å°†Heightè®¾ä¸º1  
+	//glViewport(0, 0, width, height);// é‡ç½®å½“å‰çš„è§†å£(Viewport)  
+	//glMatrixMode(GL_PROJECTION); //é€‰æ‹©æŠ•å½±çŸ©é˜µ
+	//glLoadIdentity();   //é‡ç½®æŠ•å½±çŸ©é˜µ
 
-	//¼ÆËã´°¿ÚµÄ±ÈÂÊ
+	//è®¡ç®—çª—å£çš„æ¯”ç‡
 	//gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 100.0f);
-	//glMatrixMode(GL_MODELVIEW); //Ñ¡ÔñÄ£ĞÍÊÓÍ¼¾ØÕó
-	//glLoadIdentity();    //ÖØÉèÄ£ĞÍÊÓÍ¼¾ØÕó
-	////glMatrixMode(GL_PROJECTION);// Ñ¡ÔñÍ¶Ó°¾ØÕó  
-	////glLoadIdentity();// ÖØÖÃÍ¶Ó°¾ØÕó  
-	//////gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 100.0f);	// ¼ÆËã´°¿ÚµÄÍâ¹Û±ÈÀı  
+	//glMatrixMode(GL_MODELVIEW); //é€‰æ‹©æ¨¡å‹è§†å›¾çŸ©é˜µ
+	//glLoadIdentity();    //é‡è®¾æ¨¡å‹è§†å›¾çŸ©é˜µ
+	////glMatrixMode(GL_PROJECTION);// é€‰æ‹©æŠ•å½±çŸ©é˜µ  
+	////glLoadIdentity();// é‡ç½®æŠ•å½±çŸ©é˜µ  
+	//////gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 100.0f);	// è®¡ç®—çª—å£çš„å¤–è§‚æ¯”ä¾‹  
 	////gluOrtho2D(0, width, 0, height);
-	////glMatrixMode(GL_MODELVIEW);// Ñ¡ÔñÄ£ĞÍ¹Û²ì¾ØÕó  
-	//////glLoadIdentity();// ÖØÖÃÄ£ĞÍ¹Û²ì¾ØÕó  
+	////glMatrixMode(GL_MODELVIEW);// é€‰æ‹©æ¨¡å‹è§‚å¯ŸçŸ©é˜µ  
+	//////glLoadIdentity();// é‡ç½®æ¨¡å‹è§‚å¯ŸçŸ©é˜µ  
 	pThis->resize(size(width, height));
 }
-int InitGL(GLvoid){// ´Ë´¦¿ªÊ¼¶ÔOpenGL½øĞĞËùÓĞÉèÖÃ  
-	glShadeModel(GL_SMOOTH);// ÆôÓÃÒõÓ°Æ½»¬  
-	glClearColor(0.65f, 0.65f, 0.65f, 0.0f);// ºÚÉ«±³¾°  
-	glClearDepth(1.0f);// ÉèÖÃÉî¶È»º´æ  
-	glEnable(GL_DEPTH_TEST);// ÆôÓÃÉî¶È²âÊÔ  
-	glDepthFunc(GL_LEQUAL);// Ëù×÷Éî¶È²âÊÔµÄÀàĞÍ  
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);// ÕæÕı¾«Ï¸µÄÍ¸ÊÓĞŞÕı  
+int InitGL(GLvoid){// æ­¤å¤„å¼€å§‹å¯¹OpenGLè¿›è¡Œæ‰€æœ‰è®¾ç½®  
+	glShadeModel(GL_SMOOTH);// å¯ç”¨é˜´å½±å¹³æ»‘  
+	glClearColor(0.65f, 0.65f, 0.65f, 0.0f);// é»‘è‰²èƒŒæ™¯  
+	glClearDepth(1.0f);// è®¾ç½®æ·±åº¦ç¼“å­˜  
+	glEnable(GL_DEPTH_TEST);// å¯ç”¨æ·±åº¦æµ‹è¯•  
+	glDepthFunc(GL_LEQUAL);// æ‰€ä½œæ·±åº¦æµ‹è¯•çš„ç±»å‹  
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);// çœŸæ­£ç²¾ç»†çš„é€è§†ä¿®æ­£  
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);// è¿™é‡Œçš„src_alphaå°±æ˜¯çº¹ç†çš„alphaé€šé“çš„æ•°æ®äº†
+	glTexEnvi(GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_BLEND);
+
 	//glEnable(GL_TEXTURE_2D);
-	return TRUE;// ³õÊ¼»¯ OK  
+	return TRUE;// åˆå§‹åŒ– OK  
 }
 
 const int n = 100;
 GLfloat R = 250.0f;
 const GLfloat Pi = 3.1415926536f;
 
-int DrawGLScene(appbase* pThis){// ´ÓÕâÀï¿ªÊ¼½øĞĞËùÓĞµÄ»æÖÆ  
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Çå³ıÆÁÄ»ºÍÉî¶È»º´æ  
-	//glLoadIdentity();// ÖØÖÃµ±Ç°µÄÄ£ĞÍ¹Û²ì¾ØÕó  
-	// Ôö¼ÓĞÂµÄÎïÌå  
+int DrawGLScene(appbase* pThis){// ä»è¿™é‡Œå¼€å§‹è¿›è¡Œæ‰€æœ‰çš„ç»˜åˆ¶  
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// æ¸…é™¤å±å¹•å’Œæ·±åº¦ç¼“å­˜  
+	//glLoadIdentity();// é‡ç½®å½“å‰çš„æ¨¡å‹è§‚å¯ŸçŸ©é˜µ  
+	// å¢åŠ æ–°çš„ç‰©ä½“  
 	//glColor4f(1.0f, 0.0f, 0.0f,0.5f);
 	//uibase ui;
 	//ui.drawrc(20,20,200,200);
@@ -90,24 +94,21 @@ int DrawGLScene(appbase* pThis){// ´ÓÕâÀï¿ªÊ¼½øĞĞËùÓĞµÄ»æÖÆ
 	//ui.drawpt(300, 300);
 	//ui.fillrc(20, 20, 300, 300);
 	//GLfloat     rtri = 50;
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Çå³ıÑÕÉ«ºÍÉî¶È»º´æ
-	///glLoadIdentity(); //ÖØÖÃÄ£ĞÍÊÓÍ¼¾ØÕó
-	//glTranslatef(-1.5f, 0.0f, -6.0f); //Ïò×óÒÆ¶¯1.5¸öµ¥Î»£¬ÏòÆÁÄ»ÀïÒÆ¶¯6.0¸öµ¥Î»
-	//glRotatef(rtri, 0.0f, 1.0f, 0.0f);   // ÑØyÖáĞı×ªÈı½ÇĞÎ( ĞÂ¼Ó´úÂë )
-	//glBegin(GL_TRIANGLES);     //Ê¹ÓÃGL_TRIANGLES²ÎÊı»æÖÆÈı½ÇĞÎ
-	//glColor3f(1.0f, 0.0f, 0.0f);  //ÉèÖÃÑÕÉ«ÎªºìÉ«
-	//glVertex3f(0.0f, 1.0f, 0.0f);// ´ÓÖĞµãÏòÉÏÒÆ¶¯Ò»¸öµ¥Î» (ÉÏ¶¥µã£©
-	//ÎÒÃÇÒÑ¾­°ÑµÚÒ»¸ö¶¥µã»æÖÆÔÚÁËÆÁÄ»ÉÏ£¬²¢ÉèÖÃËüµÄÑÕÉ«ÎªºìÉ«¡£ÔÚÎÒÃÇ»æÖÆµÚ¶ş¸ö¶¥µãÖ®Ç°£¬ÎÒÃÇ°ÑÑÕÉ«Öµ¸ÄÎªÂÌÉ«¡£ÕâÑùÈı½ÇĞÎµÄ×óÏÂ¶¥µã»á±»»æÖÆ³ÉÂÌÉ«¡£
-	//	glColor3f(0.0f, 1.0f, 0.0f); //ÉèÖÃÑÕÉ«ÎªÂÌÉ«
-	//glVertex3f(-1.0f, -1.0f, 0.0f); //×óÏÂ¶¥µã
-	//È»ºóÎÒÃÇ»æÖÆµÚÈı¸öÒ²ÊÇ×îºóÒ»¸ö¶¥µã¡£ÔÚÎÒÃÇ»æÖÆÖ®Ç°£¬°ÑÑÕÉ«Öµ¸ÄÎªÀ¶É«¡£ËüÊÇÈı½ÇĞÎµÄÓÒÏÂ¶¥µã¡£glEnd()º¯ÊıÖ´ĞĞÖ®ºó£¬¶à±ßĞÎ½«±»Ìî³ä¡£ÒòÎªÃ¿¸ö¶¥µãµÄÑÕÉ«²»Í¬£¬ºÍÖ»ÓĞÒ»ÖÖ¹Ì¶¨ÑÕÉ«Ïà±È£¬ÑÕÉ«½«»á´ÓÃ¿Ò»¸ö¶¥µãÀ©É¢¿ªÀ´£¬È»ºóÔÓÖĞĞÄ»ãºÏ£¬ËùÓĞµÄÑÕÉ«»ìºÏÔÚÒ»Æğ¡£Õâ¾ÍÊÇÆ½»¬×ÅÉ«¡£
-	//	glColor3f(0.0f, 0.0f, 1.0f);         //ÉèÖÃÑÕÉ«ÎªÀ¶É«
-	//glVertex3f(1.0f, -1.0f, 0.0f);    // ÓÒÏÂ¶¥µã
-	//glEnd();  //»æÖÆÈı½ÇĞÎÍê³É
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //æ¸…é™¤é¢œè‰²å’Œæ·±åº¦ç¼“å­˜
+	///glLoadIdentity(); //é‡ç½®æ¨¡å‹è§†å›¾çŸ©é˜µ
+	//glTranslatef(-1.5f, 0.0f, -6.0f); //å‘å·¦ç§»åŠ¨1.5ä¸ªå•ä½ï¼Œå‘å±å¹•é‡Œç§»åŠ¨6.0ä¸ªå•ä½
+	//glRotatef(rtri, 0.0f, 1.0f, 0.0f);   // æ²¿yè½´æ—‹è½¬ä¸‰è§’å½¢( æ–°åŠ ä»£ç  )
+	//glBegin(GL_TRIANGLES);     //ä½¿ç”¨GL_TRIANGLESå‚æ•°ç»˜åˆ¶ä¸‰è§’å½¢
+	//glColor3f(1.0f, 0.0f, 0.0f);  //è®¾ç½®é¢œè‰²ä¸ºçº¢è‰²
+	//glVertex3f(0.0f, 1.0f, 0.0f);// ä»ä¸­ç‚¹å‘ä¸Šç§»åŠ¨ä¸€ä¸ªå•ä½ (ä¸Šé¡¶ç‚¹ï¼‰
+	//æˆ‘ä»¬å·²ç»æŠŠç¬¬ä¸€ä¸ªé¡¶ç‚¹ç»˜åˆ¶åœ¨äº†å±å¹•ä¸Šï¼Œå¹¶è®¾ç½®å®ƒçš„é¢œè‰²ä¸ºçº¢è‰²ã€‚åœ¨æˆ‘ä»¬ç»˜åˆ¶ç¬¬äºŒä¸ªé¡¶ç‚¹ä¹‹å‰ï¼Œæˆ‘ä»¬æŠŠé¢œè‰²å€¼æ”¹ä¸ºç»¿è‰²ã€‚è¿™æ ·ä¸‰è§’å½¢çš„å·¦ä¸‹é¡¶ç‚¹ä¼šè¢«ç»˜åˆ¶æˆç»¿è‰²ã€‚
+	//	glColor3f(0.0f, 1.0f, 0.0f); //è®¾ç½®é¢œè‰²ä¸ºç»¿è‰²
+	//glVertex3f(-1.0f, -1.0f, 0.0f); //å·¦ä¸‹é¡¶ç‚¹
+	//ç„¶åæˆ‘ä»¬ç»˜åˆ¶ç¬¬ä¸‰ä¸ªä¹Ÿæ˜¯æœ€åä¸€ä¸ªé¡¶ç‚¹ã€‚åœ¨æˆ‘ä»¬ç»˜åˆ¶ä¹‹å‰ï¼ŒæŠŠé¢œè‰²å€¼æ”¹ä¸ºè“è‰²ã€‚å®ƒæ˜¯ä¸‰è§’å½¢çš„å³ä¸‹é¡¶ç‚¹ã€‚glEnd()å‡½æ•°æ‰§è¡Œä¹‹åï¼Œå¤šè¾¹å½¢å°†è¢«å¡«å……ã€‚å› ä¸ºæ¯ä¸ªé¡¶ç‚¹çš„é¢œè‰²ä¸åŒï¼Œå’Œåªæœ‰ä¸€ç§å›ºå®šé¢œè‰²ç›¸æ¯”ï¼Œé¢œè‰²å°†ä¼šä»æ¯ä¸€ä¸ªé¡¶ç‚¹æ‰©æ•£å¼€æ¥ï¼Œç„¶åæ‚ä¸­å¿ƒæ±‡åˆï¼Œæ‰€æœ‰çš„é¢œè‰²æ··åˆåœ¨ä¸€èµ·ã€‚è¿™å°±æ˜¯å¹³æ»‘ç€è‰²ã€‚
+	//	glColor3f(0.0f, 0.0f, 1.0f);         //è®¾ç½®é¢œè‰²ä¸ºè“è‰²
+	//glVertex3f(1.0f, -1.0f, 0.0f);    // å³ä¸‹é¡¶ç‚¹
+	//glEnd();  //ç»˜åˆ¶ä¸‰è§’å½¢å®Œæˆ
 
-	// Clear the screen.
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	// Draw the scene:
 	/*
 	glBegin(GL_TRIANGLES);
 	glColor3f(1.0f, 0.0f, 0.0f);
@@ -129,259 +130,277 @@ int DrawGLScene(appbase* pThis){// ´ÓÕâÀï¿ªÊ¼½øĞĞËùÓĞµÄ»æÖÆ
 	glVertex3f(0.5f, 1.0f, 0.0f);
 	glVertex3f(0.5f, -1, 0.0f);
 	glEnd();
-*/
+
 	R = (GLfloat)gheight/2;
-	glBegin(GL_POLYGON);//OpenGLÒªÇó£ºÖ¸¶¨¶¥µãµÄÃüÁî±ØĞë°üº¬ÔÚglBeginº¯ÊıÖ®ºó£¬
-	//glEndº¯ÊıÖ®Ç°£¨·ñÔòÖ¸¶¨µÄ¶¥µã½«±»ºöÂÔ£©¡£²¢ÓÉglBeginÀ´Ö¸Ã÷ÈçºÎÊ¹ÓÃÕâĞ©µã
-	//GL_POLYGON±íÊ¾»­¶à±ßĞÎ£¨ÓÉµãÁ¬½Ó³É¶à±ßĞÎ£©
+	glBegin(GL_POLYGON);//OpenGLè¦æ±‚ï¼šæŒ‡å®šé¡¶ç‚¹çš„å‘½ä»¤å¿…é¡»åŒ…å«åœ¨glBeginå‡½æ•°ä¹‹åï¼Œ
+	//glEndå‡½æ•°ä¹‹å‰ï¼ˆå¦åˆ™æŒ‡å®šçš„é¡¶ç‚¹å°†è¢«å¿½ç•¥ï¼‰ã€‚å¹¶ç”±glBeginæ¥æŒ‡æ˜å¦‚ä½•ä½¿ç”¨è¿™äº›ç‚¹
+	//GL_POLYGONè¡¨ç¤ºç”»å¤šè¾¹å½¢ï¼ˆç”±ç‚¹è¿æ¥æˆå¤šè¾¹å½¢ï¼‰
 	glColor3f(1.0f, 0.0f, 0.0f);
 	for (int i = 0; i<n; ++i)
-		glVertex2f(R*cos(2 * Pi / n*i), R*sin(2 * Pi / n*i));
+		glVertex2f(R*cos(2 * Pi / n*i) + gwidth / 2, R*sin(2 * Pi / n*i) + gheight /2);
 
 	glEnd();
+*/
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Clear the screen.
 
 
 	pThis->draw();
 
-	return TRUE;// Ò»ÇĞOK  
+	return TRUE;// ä¸€åˆ‡OK  
 }
-GLvoid KillGLWindow(GLvoid){// Õı³£Ïú»Ù´°¿Ú  
-	if (fullscreen){// ´¦ÓÚÈ«ÆÁÄ£Ê½Âğ  
-		ChangeDisplaySettings(NULL, 0);// ÊÇµÄ»°£¬ÇĞ»»»Ø×ÀÃæ  
-		ShowCursor(TRUE);// ÏÔÊ¾Êó±êÖ¸Õë  
+GLvoid KillGLWindow(GLvoid){// æ­£å¸¸é”€æ¯çª—å£  
+	if (fullscreen){// å¤„äºå…¨å±æ¨¡å¼å—  
+		ChangeDisplaySettings(NULL, 0);// æ˜¯çš„è¯ï¼Œåˆ‡æ¢å›æ¡Œé¢  
+		ShowCursor(TRUE);// æ˜¾ç¤ºé¼ æ ‡æŒ‡é’ˆ  
 	}
-	if (hRC){// ÓµÓĞ×ÅÉ«ÃèÊö±íÂğ  
-		if (!wglMakeCurrent(NULL, NULL)) MessageBox(NULL, L"Release Of DC And RC Failed.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);// ÄÜ·ñÊÍ·ÅDCºÍRCÃèÊö±í  
-		if (!wglDeleteContext(hRC))	MessageBox(NULL, L"Release Rendering Context Failed.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);// ÄÜ·ñÉ¾³ıRC  
-		hRC = NULL;// ½«RCÉèÎªNULL  
+	if (hRC){// æ‹¥æœ‰ç€è‰²æè¿°è¡¨å—  
+		if (!wglMakeCurrent(NULL, NULL)) MessageBox(NULL, L"Release Of DC And RC Failed.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);// èƒ½å¦é‡Šæ”¾DCå’ŒRCæè¿°è¡¨  
+		if (!wglDeleteContext(hRC))	MessageBox(NULL, L"Release Rendering Context Failed.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);// èƒ½å¦åˆ é™¤RC  
+		hRC = NULL;// å°†RCè®¾ä¸ºNULL  
 	}
-	if (hDC && !ReleaseDC(hWnd, hDC)){// ÄÜ·ñÊÍ·ÅDC  
+	if (hDC && !ReleaseDC(hWnd, hDC)){// èƒ½å¦é‡Šæ”¾DC  
 		MessageBox(NULL, L"Release Device Context Failed.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
-		hDC = NULL;// ½«DCÉèÎªNULL  
+		hDC = NULL;// å°†DCè®¾ä¸ºNULL  
 	}
-	if (hWnd && !DestroyWindow(hWnd)){// ÄÜ·ñÏú»Ù´°¿Ú  
+	if (hWnd && !DestroyWindow(hWnd)){// èƒ½å¦é”€æ¯çª—å£  
 		MessageBox(NULL, L"Could Not Release hWnd.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
-		hWnd = NULL;// ½«hWndÉèÎªNULL  
+		hWnd = NULL;// å°†hWndè®¾ä¸ºNULL  
 	}
-	if (!UnregisterClass(tcWndClass, hInstance)){// ÄÜ·ñ×¢Ïú´°¿ÚÀà  
+	if (!UnregisterClass(tcWndClass, hInstance)){// èƒ½å¦æ³¨é”€çª—å£ç±»  
 		MessageBox(NULL, L"Could Not Unregister Class.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
-		hInstance = NULL;// ½«hInstanceÉèÎªNULL  
+		hInstance = NULL;// å°†hInstanceè®¾ä¸ºNULL  
 	}
 }
 
 BOOL CreateGLWindow(appbase* pThis,const TCHAR* title, int width, int height, int bits, bool fullscreenflag){
-	GLuint PixelFormat; RECT rc;          // ±£´æ²éÕÒÆ¥ÅäµÄ½á¹û  
-	WNDCLASS wc; DWORD dwExStyle, dwStyle; // ´°¿Ú·ç¸ñ  
+	GLuint PixelFormat; RECT rc;          // ä¿å­˜æŸ¥æ‰¾åŒ¹é…çš„ç»“æœ  
+	WNDCLASS wc; DWORD dwExStyle, dwStyle; // çª—å£é£æ ¼  
 	rc.left = rc.top = (long)0; rc.right = (long)width; rc.bottom = (long)height; 
-	fullscreen = fullscreenflag;              // ÉèÖÃÈ«¾ÖÈ«ÆÁ±êÖ¾  
-	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;      // ÒÆ¶¯Ê±ÖØ»­£¬²¢Îª´°¿ÚÈ¡µÃDC  
-	wc.lpfnWndProc = (WNDPROC)WndProc;                         // WndProc´¦ÀíÏûÏ¢  
-	wc.cbClsExtra = 0; wc.cbWndExtra = 0; wc.hInstance = hInstance = GetModuleHandle(NULL);  // ÉèÖÃÊµÀı  
-	wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);                     // ×°ÈëÈ±Ê¡Í¼±ê  
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);                   // ×°ÈëÊó±êÖ¸Õë  
-	wc.hbrBackground = NULL; wc.lpszMenuName = NULL;                                                // GL²»ĞèÒª±³¾°  
-	wc.lpszClassName = tcWndClass;                                        // Éè¶¨ÀàÃû×Ö  
+	fullscreen = fullscreenflag;              // è®¾ç½®å…¨å±€å…¨å±æ ‡å¿—  
+	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;      // ç§»åŠ¨æ—¶é‡ç”»ï¼Œå¹¶ä¸ºçª—å£å–å¾—DC  
+	wc.lpfnWndProc = (WNDPROC)WndProc;                         // WndProcå¤„ç†æ¶ˆæ¯  
+	wc.cbClsExtra = 0; wc.cbWndExtra = 0; wc.hInstance = hInstance = GetModuleHandle(NULL);  // è®¾ç½®å®ä¾‹  
+	wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);                     // è£…å…¥ç¼ºçœå›¾æ ‡  
+	wc.hCursor = LoadCursor(NULL, IDC_ARROW);                   // è£…å…¥é¼ æ ‡æŒ‡é’ˆ  
+	wc.hbrBackground = NULL; wc.lpszMenuName = NULL;                                                // GLä¸éœ€è¦èƒŒæ™¯  
+	wc.lpszClassName = tcWndClass;                                        // è®¾å®šç±»åå­—  
 
-	if (!RegisterClass(&wc)){                                                    // ³¢ÊÔ×¢²á´°¿ÚÀà  
-		appbase::alert(L"×¢²á´°¿ÚÀàÊ§°Ü");
-		return FALSE;// ÍË³ö²¢·µ»ØFALSE  
+	if (!RegisterClass(&wc)){                                                    // å°è¯•æ³¨å†Œçª—å£ç±»  
+		appbase::alert(L"RegisterClass fail");
+		return FALSE;// é€€å‡ºå¹¶è¿”å›FALSE  
 	}
-	if (fullscreen){// Òª³¢ÊÔÈ«ÆÁÄ£Ê½Âğ  
-		DEVMODE dmScreenSettings;                                           // Éè±¸Ä£Ê½  
-		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));   // È·±£ÄÚ´æ·ÖÅä  
-		dmScreenSettings.dmSize = sizeof(dmScreenSettings);           // Devmode ½á¹¹µÄ´óĞ¡  
-		dmScreenSettings.dmPelsWidth = width;                           // ËùÑ¡ÆÁÄ»¿í¶È  
-		dmScreenSettings.dmPelsHeight = height;                         // ËùÑ¡ÆÁÄ»¸ß¶È  
-		dmScreenSettings.dmBitsPerPel = bits;                               // Ã¿ÏóËØËùÑ¡µÄÉ«²ÊÉî¶È  
+	if (fullscreen){// è¦å°è¯•å…¨å±æ¨¡å¼å—  
+		DEVMODE dmScreenSettings;                                           // è®¾å¤‡æ¨¡å¼  
+		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));   // ç¡®ä¿å†…å­˜åˆ†é…  
+		dmScreenSettings.dmSize = sizeof(dmScreenSettings);           // Devmode ç»“æ„çš„å¤§å°  
+		dmScreenSettings.dmPelsWidth = width;                           // æ‰€é€‰å±å¹•å®½åº¦  
+		dmScreenSettings.dmPelsHeight = height;                         // æ‰€é€‰å±å¹•é«˜åº¦  
+		dmScreenSettings.dmBitsPerPel = bits;                               // æ¯è±¡ç´ æ‰€é€‰çš„è‰²å½©æ·±åº¦  
 		dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
-		// ³¢ÊÔÉèÖÃÏÔÊ¾Ä£Ê½²¢·µ»Ø½á¹û¡£×¢: CDS_FULLSCREEN ÒÆÈ¥ÁË×´Ì¬Ìõ¡£  
+		// å°è¯•è®¾ç½®æ˜¾ç¤ºæ¨¡å¼å¹¶è¿”å›ç»“æœã€‚æ³¨: CDS_FULLSCREEN ç§»å»äº†çŠ¶æ€æ¡ã€‚  
 		if (ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL){
-			// ÈôÄ£Ê½Ê§°Ü£¬Ìá¹©Á½¸öÑ¡Ïî£ºÍË³ö»òÔÚ´°¿ÚÄÚÔËĞĞ¡£  
+			// è‹¥æ¨¡å¼å¤±è´¥ï¼Œæä¾›ä¸¤ä¸ªé€‰é¡¹ï¼šé€€å‡ºæˆ–åœ¨çª—å£å†…è¿è¡Œã€‚  
 			if (MessageBox(NULL, L"The Requested Fullscreen Mode Is Not Supported By/nYour Video Card. Use Windowed Mode Instead?", L"NeHe GL",
 				MB_YESNO | MB_ICONEXCLAMATION) == IDYES){
-				fullscreen = FALSE;// Ñ¡Ôñ´°¿ÚÄ£Ê½(Fullscreen=FALSE)  
+				fullscreen = FALSE;// é€‰æ‹©çª—å£æ¨¡å¼(Fullscreen=FALSE)  
 			}
 			else{
 				// Pop Up A Message Box Letting User Know The Program Is Closing.  
 				MessageBox(NULL, L"Program Will Now Close.", L"ERROR", MB_OK | MB_ICONSTOP);
-				return FALSE;//ÍË³ö²¢·µ»ØFALSE  
+				return FALSE;//é€€å‡ºå¹¶è¿”å›FALSE  
 			}
 		}
 	}
-	if (fullscreen){// ÈÔ´¦ÓÚÈ«ÆÁÄ£Ê½Âğ  
-		dwExStyle = WS_EX_APPWINDOW;  // À©Õ¹´°Ìå·ç¸ñ  
-		dwStyle = WS_POPUP;                   // ´°Ìå·ç¸ñ  
-		ShowCursor(FALSE);                      // Òş²ØÊó±êÖ¸Õë  
+	if (fullscreen){// ä»å¤„äºå…¨å±æ¨¡å¼å—  
+		dwExStyle = WS_EX_APPWINDOW;  // æ‰©å±•çª—ä½“é£æ ¼  
+		dwStyle = WS_POPUP;                   // çª—ä½“é£æ ¼  
+		ShowCursor(FALSE);                      // éšè—é¼ æ ‡æŒ‡é’ˆ  
 	}
 	else{
-		dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;   // À©Õ¹´°Ìå·ç¸ñ  
-		dwStyle = WS_OVERLAPPEDWINDOW;                                // ´°Ìå·ç¸ñ  
+		dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;   // æ‰©å±•çª—ä½“é£æ ¼  
+		dwStyle = WS_OVERLAPPEDWINDOW;                                // çª—ä½“é£æ ¼  
 	}
-	AdjustWindowRectEx(&rc, dwStyle, FALSE, dwExStyle);// µ÷Õû´°¿Ú´ïµ½ÕæÕıÒªÇóµÄ´óĞ¡  
-	if (!(hWnd = CreateWindowEx(dwExStyle,           // À©Õ¹´°Ìå·ç¸ñ  
-		tcWndClass,                                           // ÀàÃû×Ö  
-		title,                                                      // ´°¿Ú±êÌâ  
-		WS_CLIPSIBLINGS |                                   // ±ØĞëµÄ´°Ìå·ç¸ñÊôĞÔ  
-		WS_CLIPCHILDREN |                                   // ±ØĞëµÄ´°Ìå·ç¸ñÊôĞÔ  
-		dwStyle,                                                    // Ñ¡ÔñµÄ´°ÌåÊôĞÔ  
-		0, 0,                                                        // ´°¿ÚÎ»ÖÃ  
-		rc.right - rc.left,               // ¼ÆËãµ÷ÕûºÃµÄ´°¿Ú¿í¶È  
-		rc.bottom - rc.top,           // ¼ÆËãµ÷ÕûºÃµÄ´°¿Ú¸ß¶È  
-		NULL,                                                       // ÎŞ¸¸´°¿Ú  
-		NULL,                                                       // ÎŞ²Ëµ¥  
-		hInstance,                                              // ÊµÀı  
-		NULL)))                                                 // ²»ÏòWM_CREATE´«µİÈÎºÎ¶«¶«  
+	AdjustWindowRectEx(&rc, dwStyle, FALSE, dwExStyle);// è°ƒæ•´çª—å£è¾¾åˆ°çœŸæ­£è¦æ±‚çš„å¤§å°  
+	if (!(hWnd = CreateWindowEx(dwExStyle,           // æ‰©å±•çª—ä½“é£æ ¼  
+		tcWndClass,                                           // ç±»åå­—  
+		title,                                                      // çª—å£æ ‡é¢˜  
+		WS_CLIPSIBLINGS |                                   // å¿…é¡»çš„çª—ä½“é£æ ¼å±æ€§  
+		WS_CLIPCHILDREN |                                   // å¿…é¡»çš„çª—ä½“é£æ ¼å±æ€§  
+		dwStyle,                                                    // é€‰æ‹©çš„çª—ä½“å±æ€§  
+		0, 0,                                                        // çª—å£ä½ç½®  
+		rc.right - rc.left,               // è®¡ç®—è°ƒæ•´å¥½çš„çª—å£å®½åº¦  
+		rc.bottom - rc.top,           // è®¡ç®—è°ƒæ•´å¥½çš„çª—å£é«˜åº¦  
+		NULL,                                                       // æ— çˆ¶çª—å£  
+		NULL,                                                       // æ— èœå•  
+		hInstance,                                              // å®ä¾‹  
+		NULL)))                                                 // ä¸å‘WM_CREATEä¼ é€’ä»»ä½•ä¸œä¸œ  
 	{
-		KillGLWindow();// ÖØÖÃÏÔÊ¾Çø  
+		KillGLWindow();// é‡ç½®æ˜¾ç¤ºåŒº  
 		MessageBox(NULL, L"Window Creation Error.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
-		return FALSE;// ·µ»Ø FALSE  
+		return FALSE;// è¿”å› FALSE  
 	}
-	static PIXELFORMATDESCRIPTOR pfd = {//pfd ¸æËß´°¿ÚÎÒÃÇËùÏ£ÍûµÄ¶«¶«  
-		sizeof(PIXELFORMATDESCRIPTOR),          //ÉÏÊö¸ñÊ½ÃèÊö·ûµÄ´óĞ¡  
-		1,                                                      // °æ±¾ºÅ  
-		PFD_DRAW_TO_WINDOW |                        // ¸ñÊ½±ØĞëÖ§³Ö´°¿Ú  
-		PFD_SUPPORT_OPENGL |                        // ¸ñÊ½±ØĞëÖ§³ÖOpenGL  
-		PFD_DOUBLEBUFFER,                               // ±ØĞëÖ§³ÖË«»º³å  
-		PFD_TYPE_RGBA,                                  // ÉêÇë RGBA ¸ñÊ½  
-		bits,                                                   // Ñ¡¶¨É«²ÊÉî¶È  
-		0, 0, 0, 0, 0, 0,                                   // ºöÂÔµÄÉ«²ÊÎ»  
-		0,                                                      // ÎŞAlpha»º´æ  
-		0,                                                      // ºöÂÔShift Bit  
-		0,                                                      // ÎŞ¾Û¼¯»º´æ  
-		0, 0, 0, 0,                                         // ºöÂÔ¾Û¼¯Î»  
-		16,                                                 // 16Î» Z-»º´æ (Éî¶È»º´æ)  
-		0,                                                      // ÎŞÄ£°å»º´æ  
-		0,                                                      // ÎŞ¸¨Öú»º´æ  
-		PFD_MAIN_PLANE,                             // Ö÷»æÍ¼²ã  
-		0,                                                      // ±£Áô  
-		0, 0, 0                                             // ºöÂÔ²ãÕÚÕÖ  
+	static PIXELFORMATDESCRIPTOR pfd = {//pfd å‘Šè¯‰çª—å£æˆ‘ä»¬æ‰€å¸Œæœ›çš„ä¸œä¸œ  
+		sizeof(PIXELFORMATDESCRIPTOR),          //ä¸Šè¿°æ ¼å¼æè¿°ç¬¦çš„å¤§å°  
+		1,                                                      // ç‰ˆæœ¬å·  
+		PFD_DRAW_TO_WINDOW |                        // æ ¼å¼å¿…é¡»æ”¯æŒçª—å£  
+		PFD_SUPPORT_OPENGL |                        // æ ¼å¼å¿…é¡»æ”¯æŒOpenGL  
+		PFD_DOUBLEBUFFER,                               // å¿…é¡»æ”¯æŒåŒç¼“å†²  
+		PFD_TYPE_RGBA,                                  // ç”³è¯· RGBA æ ¼å¼  
+		bits,                                                   // é€‰å®šè‰²å½©æ·±åº¦  
+		0, 0, 0, 0, 0, 0,                                   // å¿½ç•¥çš„è‰²å½©ä½  
+		0,                                                      // æ— Alphaç¼“å­˜  
+		0,                                                      // å¿½ç•¥Shift Bit  
+		0,                                                      // æ— èšé›†ç¼“å­˜  
+		0, 0, 0, 0,                                         // å¿½ç•¥èšé›†ä½  
+		16,                                                 // 16ä½ Z-ç¼“å­˜ (æ·±åº¦ç¼“å­˜)  
+		0,                                                      // æ— æ¨¡æ¿ç¼“å­˜  
+		0,                                                      // æ— è¾…åŠ©ç¼“å­˜  
+		PFD_MAIN_PLANE,                             // ä¸»ç»˜å›¾å±‚  
+		0,                                                      // ä¿ç•™  
+		0, 0, 0                                             // å¿½ç•¥å±‚é®ç½©  
 	};
-	if (!(hDC = GetDC(hWnd))){// È¡µÃÉè±¸ÃèÊö±íÁËÃ´  
-		KillGLWindow();// ÖØÖÃÏÔÊ¾Çø  
+	if (!(hDC = GetDC(hWnd))){// å–å¾—è®¾å¤‡æè¿°è¡¨äº†ä¹ˆ  
+		KillGLWindow();// é‡ç½®æ˜¾ç¤ºåŒº  
 		MessageBox(NULL, L"Can't Create A GL Device Context.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
-		return FALSE;// ·µ»Ø FALSE  
+		return FALSE;// è¿”å› FALSE  
 	}
-	if (!(PixelFormat = ChoosePixelFormat(hDC, &pfd))){// Windows ÕÒµ½ÏàÓ¦µÄÏóËØ¸ñÊ½ÁËÂğ  
-		KillGLWindow();// ÖØÖÃÏÔÊ¾Çø  
+	if (!(PixelFormat = ChoosePixelFormat(hDC, &pfd))){// Windows æ‰¾åˆ°ç›¸åº”çš„è±¡ç´ æ ¼å¼äº†å—  
+		KillGLWindow();// é‡ç½®æ˜¾ç¤ºåŒº  
 		MessageBox(NULL, L"Can't Find A Suitable PixelFormat.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
-		return FALSE;// ·µ»Ø FALSE  
+		return FALSE;// è¿”å› FALSE  
 	}
-	if (!SetPixelFormat(hDC, PixelFormat, &pfd)){// ÄÜ¹»ÉèÖÃÏóËØ¸ñÊ½Ã´  
-		KillGLWindow();// ÖØÖÃÏÔÊ¾Çø  
+	if (!SetPixelFormat(hDC, PixelFormat, &pfd)){// èƒ½å¤Ÿè®¾ç½®è±¡ç´ æ ¼å¼ä¹ˆ  
+		KillGLWindow();// é‡ç½®æ˜¾ç¤ºåŒº  
 		MessageBox(NULL, L"Can't Set The PixelFormat.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
-		return FALSE;// ·µ»Ø FALSE  
+		return FALSE;// è¿”å› FALSE  
 	}
-	if (!(hRC = wglCreateContext(hDC))){// ÄÜ·ñÈ¡µÃ×ÅÉ«ÃèÊö±í  
-		KillGLWindow();// ÖØÖÃÏÔÊ¾Çø  
+	if (!(hRC = wglCreateContext(hDC))){// èƒ½å¦å–å¾—ç€è‰²æè¿°è¡¨  
+		KillGLWindow();// é‡ç½®æ˜¾ç¤ºåŒº  
 		MessageBox(NULL, L"Can't Create A GL Rendering Context.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
-		return FALSE;// ·µ»Ø FALSE  
+		return FALSE;// è¿”å› FALSE  
 	}
-	if (!wglMakeCurrent(hDC, hRC)){// ³¢ÊÔ¼¤»î×ÅÉ«ÃèÊö±í  
-		KillGLWindow();// ÖØÖÃÏÔÊ¾Çø  
+	if (!wglMakeCurrent(hDC, hRC)){// å°è¯•æ¿€æ´»ç€è‰²æè¿°è¡¨  
+		KillGLWindow();// é‡ç½®æ˜¾ç¤ºåŒº  
 		MessageBox(NULL, L"Can't Activate The GL Rendering Context.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
-		return FALSE;// ·µ»Ø FALSE  
+		return FALSE;// è¿”å› FALSE  
 	}
 
 	const char* ver = (char*)glGetString(GL_VERSION);
 
-	ShowWindow(hWnd, SW_SHOW);       // ÏÔÊ¾´°¿Ú  
-	SetForegroundWindow(hWnd);      // ÂÔÂÔÌá¸ßÓÅÏÈ¼¶  
-	SetFocus(hWnd);                         // ÉèÖÃ¼üÅÌµÄ½¹µãÖÁ´Ë´°¿Ú  
-	ReSizeGLScene(pThis,width, height);       // ÉèÖÃÍ¸ÊÓ GL ÆÁÄ»  
-	if (!InitGL()){// ³õÊ¼»¯ĞÂ½¨µÄGL´°¿Ú  
-		KillGLWindow();// ÖØÖÃÏÔÊ¾Çø  
+	ShowWindow(hWnd, SW_SHOW);       // æ˜¾ç¤ºçª—å£  
+	SetForegroundWindow(hWnd);      // ç•¥ç•¥æé«˜ä¼˜å…ˆçº§  
+	SetFocus(hWnd);                         // è®¾ç½®é”®ç›˜çš„ç„¦ç‚¹è‡³æ­¤çª—å£  
+	ReSizeGLScene(pThis,width, height);       // è®¾ç½®é€è§† GL å±å¹•  
+	if (!InitGL()){// åˆå§‹åŒ–æ–°å»ºçš„GLçª—å£  
+		KillGLWindow();// é‡ç½®æ˜¾ç¤ºåŒº  
 		MessageBox(NULL, L"Initialization Failed.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
-		return FALSE;// ·µ»Ø FALSE  
+		return FALSE;// è¿”å› FALSE  
 	}
-	return TRUE;// ³É¹¦  
+	return TRUE;// æˆåŠŸ  
 }
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {                // ¸½¼ÓµÄÏûÏ¢ÄÚÈİ  
-	switch (uMsg){// ¼ì²éWindowsÏûÏ¢  
-	case WM_ACTIVATE:{// ¼àÊÓ´°¿Ú¼¤»îÏûÏ¢  
-		if (!HIWORD(wParam)) active = TRUE;// ¼ì²é×îĞ¡»¯×´Ì¬  // ³ÌĞò´¦ÓÚ¼¤»î×´Ì¬  
-		else active = FALSE;// ³ÌĞò²»ÔÙ¼¤»î  
+LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {                // é™„åŠ çš„æ¶ˆæ¯å†…å®¹  
+	switch (uMsg){// æ£€æŸ¥Windowsæ¶ˆæ¯  
+	case WM_ACTIVATE:{// ç›‘è§†çª—å£æ¿€æ´»æ¶ˆæ¯  
+		if (!HIWORD(wParam)) active = TRUE;// æ£€æŸ¥æœ€å°åŒ–çŠ¶æ€  // ç¨‹åºå¤„äºæ¿€æ´»çŠ¶æ€  
+		else active = FALSE;// ç¨‹åºä¸å†æ¿€æ´»  
 		OutputDebugString(L"WM_ACTIVATE\r\n");
-		return 0;// ·µ»ØÏûÏ¢Ñ­»·  
+		return 0;// è¿”å›æ¶ˆæ¯å¾ªç¯  
 	}break;
-	case WM_SYSCOMMAND:{// ÖĞ¶ÏÏµÍ³ÃüÁîIntercept System Commands  
+	case WM_SYSCOMMAND:{// ä¸­æ–­ç³»ç»Ÿå‘½ä»¤Intercept System Commands  
 		OutputDebugString(L"WM_SYSCOMMAND\r\n");
-		switch (wParam){// ¼ì²éÏµÍ³µ÷ÓÃCheck System Calls  
-		case SC_SCREENSAVE:// ÆÁ±£ÒªÔËĞĞ?  
-		case SC_MONITORPOWER:// ÏÔÊ¾Æ÷Òª½øÈë½ÚµçÄ£Ê½?  
-			return 0;// ×èÖ¹·¢Éú  
+		switch (wParam){// æ£€æŸ¥ç³»ç»Ÿè°ƒç”¨Check System Calls  
+		case SC_SCREENSAVE:// å±ä¿è¦è¿è¡Œ?  
+		case SC_MONITORPOWER:// æ˜¾ç¤ºå™¨è¦è¿›å…¥èŠ‚ç”µæ¨¡å¼?  
+			return 0;// é˜»æ­¢å‘ç”Ÿ  
 		}
-		break;// ÍË³ö  
+		break;// é€€å‡º  
 	}break;
-	case WM_CLOSE:{// ÊÕµ½CloseÏûÏ¢?  
+	case WM_CLOSE:{// æ”¶åˆ°Closeæ¶ˆæ¯?  
 		OutputDebugString(L"WM_CLOSE\r\n");
-		PostQuitMessage(0);// ·¢³öÍË³öÏûÏ¢  
+		PostQuitMessage(0);// å‘å‡ºé€€å‡ºæ¶ˆæ¯  
 		return 0;
 	}break;
-	case WM_KEYDOWN:{// ÓĞ¼ü°´ÏÂÃ´?  
+	case WM_KEYDOWN:{// æœ‰é”®æŒ‰ä¸‹ä¹ˆ?  
 		OutputDebugString(L"WM_KEYDOWN\r\n");
-		keys[wParam] = TRUE;// Èç¹ûÊÇ£¬ÉèÎªTRUE  
+		keys[wParam] = TRUE;// å¦‚æœæ˜¯ï¼Œè®¾ä¸ºTRUE  
 		//painted = TRUE;
-		return 0;// ·µ»Ø  
+		return 0;// è¿”å›  
 	}break;
-	case WM_KEYUP:{// ÓĞ¼ü·Å¿ªÃ´?  
+	case WM_KEYUP:{// æœ‰é”®æ”¾å¼€ä¹ˆ?  
 		OutputDebugString(L"WM_KEYUP\r\n");
-		keys[wParam] = FALSE;// Èç¹ûÊÇ£¬ÉèÎªFALSE  
-		return 0;// ·µ»Ø  
+		keys[wParam] = FALSE;// å¦‚æœæ˜¯ï¼Œè®¾ä¸ºFALSE  
+		return 0;// è¿”å›  
 	}break;
 	case WM_SIZE:{
 		ReSizeGLScene(pThis,LOWORD(lParam), HIWORD(lParam));
 		return 0;
 	}break;
+	case WM_LBUTTONUP:{
+		ReleaseCapture();
+		pThis->onevent(uMsg, wParam, lParam);
+		appbase::painted = true;
+	}break;
+	case WM_LBUTTONDOWN:{
+		SetCapture(hWnd);
+		pThis->onevent(uMsg, wParam, lParam);
+		appbase::painted = true;
+	}break;
 	}
-	return DefWindowProc(hWnd, uMsg, wParam, lParam);	// ÏòDefWindowProc´«µİËùÓĞÎ´´¦ÀíµÄÏûÏ¢¡£  
+	return DefWindowProc(hWnd, uMsg, wParam, lParam);	// å‘DefWindowProcä¼ é€’æ‰€æœ‰æœªå¤„ç†çš„æ¶ˆæ¯ã€‚  
 }
 
 
 //appbase::appbase(){}
 //appbase::~appbase(){}
 void appbase::run(){
-	MSG msg; BOOL done = FALSE; // ÓÃÀ´ÍË³öÑ­»·µÄBool ±äÁ¿  
+	MSG msg; BOOL done = FALSE; // ç”¨æ¥é€€å‡ºå¾ªç¯çš„Bool å˜é‡  
 	pThis = this;
-	// ÌáÊ¾ÓÃ»§Ñ¡ÔñÔËĞĞÄ£Ê½  
+	// æç¤ºç”¨æˆ·é€‰æ‹©è¿è¡Œæ¨¡å¼  
 	//if (MessageBox(NULL, _T("Would You Like To Run In Fullscreen Mode?"), _T("Start FullScreen?"), MB_YESNO | MB_ICONQUESTION) == IDNO)
-	fullscreen = FALSE; // ´°¿ÚÄ£Ê½  
-	// ´´½¨OpenGL´°¿Ú  
-	if (!CreateGLWindow(this,szTitle, 640, 480, 16, fullscreen)) return;// Ê§°ÜÍË³ö  
+	fullscreen = FALSE; // çª—å£æ¨¡å¼  
+	// åˆ›å»ºOpenGLçª—å£  
+	if (!CreateGLWindow(this,szTitle, 640, 480, 16, fullscreen)) return;// å¤±è´¥é€€å‡º  
 	if (init()){
-		while (!done){// ±£³ÖÑ­»·Ö±µ½ done=TRUE  
-			painted = FALSE;
-			if (GetMessage(&msg, NULL, 0, 0) == 0)	break;		// WM_QUIT ÓĞÏûÏ¢ÔÚµÈ´ıÂğ?  
-			if (msg.message == WM_PAINT){ painted = TRUE; }
-			TranslateMessage(&msg); // ·­ÒëÏûÏ¢  
-			DispatchMessage(&msg);  // ·¢ËÍÏûÏ¢ 
+		while (!done){// ä¿æŒå¾ªç¯ç›´åˆ° done=TRUE  
+			painted = false;
+			if (GetMessage(&msg, NULL, 0, 0) == 0)	break;		// WM_QUIT æœ‰æ¶ˆæ¯åœ¨ç­‰å¾…å—?  
+			if (msg.message == WM_PAINT){ painted = true; }
+			TranslateMessage(&msg); // ç¿»è¯‘æ¶ˆæ¯  
+			DispatchMessage(&msg);  // å‘é€æ¶ˆæ¯ 
 			//OutputDebugString(L"message\r\n");
-			if (active){// ³ÌĞò¼¤»îµÄÃ´?  		// »æÖÆ³¡¾°¡£¼àÊÓESC¼üºÍÀ´×ÔDrawGLScene()µÄÍË³öÏûÏ¢  
-				if (keys[VK_ESCAPE]) done = TRUE;// ESC °´ÏÂÁËÃ´?  // ESC ·¢³öÍË³öĞÅºÅ  
-				else{// ²»ÊÇÍË³öµÄÊ±ºò£¬Ë¢ĞÂÆÁÄ»  
-					if (painted){// Èç¹ûÃ»ÓĞÏûÏ¢ 		
+			if (active){// ç¨‹åºæ¿€æ´»çš„ä¹ˆ?  		// ç»˜åˆ¶åœºæ™¯ã€‚ç›‘è§†ESCé”®å’Œæ¥è‡ªDrawGLScene()çš„é€€å‡ºæ¶ˆæ¯  
+				if (keys[VK_ESCAPE]) done = TRUE;// ESC æŒ‰ä¸‹äº†ä¹ˆ?  // ESC å‘å‡ºé€€å‡ºä¿¡å·  
+				else{// ä¸æ˜¯é€€å‡ºçš„æ—¶å€™ï¼Œåˆ·æ–°å±å¹•  
+					if (painted){// å¦‚æœæ²¡æœ‰æ¶ˆæ¯ 		
 						//OutputDebugString(L"Paint\r\n");
 						crossany::log::otprint("painted %d", painted);
-						DrawGLScene(this);// »æÖÆ³¡¾°  
+						DrawGLScene(this);// ç»˜åˆ¶åœºæ™¯  
 						frames++;
-						SwapBuffers(hDC);// ½»»»»º´æ (Ë«»º´æ)  
+						SwapBuffers(hDC);// äº¤æ¢ç¼“å­˜ (åŒç¼“å­˜)  
 					}
 				}
 			}
-			if (keys[VK_F1]){// ÔÊĞíÓÃ»§°´ÏÂF1¼üÔÚÈ«ÆÁÄ£Ê½ºÍ´°¿ÚÄ£Ê½¼äÇĞ»»  
-				keys[VK_F1] = FALSE;// ÈôÊÇ£¬Ê¹¶ÔÓ¦µÄKeyÊı×éÖĞµÄÖµÎª FALSE  
-				KillGLWindow();// Ïú»Ùµ±Ç°µÄ´°¿Ú  
-				fullscreen = !fullscreen; // ÇĞ»» È«ÆÁ / ´°¿Ú Ä£Ê½  
-				// ÖØ½¨ OpenGL ´°¿Ú  
-				if (!CreateGLWindow(this,szTitle, 640, 480, 16, fullscreen))	return;// Èç¹û´°¿ÚÎ´ÄÜ´´½¨£¬³ÌĞòÍË³ö  
-				painted = TRUE;
+			if (keys[VK_F1]){// å…è®¸ç”¨æˆ·æŒ‰ä¸‹F1é”®åœ¨å…¨å±æ¨¡å¼å’Œçª—å£æ¨¡å¼é—´åˆ‡æ¢  
+				keys[VK_F1] = FALSE;// è‹¥æ˜¯ï¼Œä½¿å¯¹åº”çš„Keyæ•°ç»„ä¸­çš„å€¼ä¸º FALSE  
+				KillGLWindow();// é”€æ¯å½“å‰çš„çª—å£  
+				fullscreen = !fullscreen; // åˆ‡æ¢ å…¨å± / çª—å£ æ¨¡å¼  
+				// é‡å»º OpenGL çª—å£  
+				if (!CreateGLWindow(this,szTitle, 640, 480, 16, fullscreen))	return;// å¦‚æœçª—å£æœªèƒ½åˆ›å»ºï¼Œç¨‹åºé€€å‡º  
+				painted = true;
 			}
 		}
 	}
-	// ¹Ø±Õ³ÌĞò  
-	KillGLWindow();// Ïú»Ù´°¿Ú  
+	// å…³é—­ç¨‹åº  
+	KillGLWindow();// é”€æ¯çª—å£  
 	delete this;
-	return ;// ÍË³ö³ÌĞò  
+	return ;// é€€å‡ºç¨‹åº  
 };
+
+void appbase::onevent(const UINT& msg, const WPARAM& w, const LPARAM& l){
+	orz.onevent(msg, w, l);
+}
+
+#include "appbase.hpp"
 
 NS_CROSSANY_END
