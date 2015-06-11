@@ -6,7 +6,7 @@
 #include <math.h>
 #include "log.h"
 #include "ui/img9.h"
-#include "ime.h"
+#include "ui/ime.h"
 
 
 NS_CROSSANY_BEGIN

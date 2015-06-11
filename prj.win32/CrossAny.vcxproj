@@ -52,7 +52,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PRJWIN32_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../Classes;../third_lib/lpng1617</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Classes;../third_lib/lpng1617;../third_lib/freetype-2.6/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -60,8 +60,8 @@
       <AdditionalDependencies>opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;libpng16.lib;zlib.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../third_lib/lpng1617/projects/vstudio/Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;libpng16.lib;zlib.lib;freetype26d.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../third_lib/freetype-2.6/objs/vc2010/Win32;../third_lib/lpng1617/projects/vstudio/Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -89,7 +89,6 @@
     <ClInclude Include="..\Classes\coordinate.h" />
     <ClInclude Include="..\Classes\CrossAny.h" />
     <ClInclude Include="..\Classes\glview.h" />
-    <ClInclude Include="..\Classes\ime.h" />
     <ClInclude Include="..\Classes\log.h" />
     <ClInclude Include="..\Classes\msg.h" />
     <ClInclude Include="..\Classes\node.h" />
@@ -97,13 +96,14 @@
     <ClInclude Include="..\Classes\tls.h" />
     <ClInclude Include="..\Classes\ui\button.h" />
     <ClInclude Include="..\Classes\ui\div.h" />
+    <ClInclude Include="..\Classes\ui\ime.h" />
     <ClInclude Include="..\Classes\ui\img9.h" />
+    <ClInclude Include="..\Classes\ui\label.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\coordinate.cpp" />
-    <ClCompile Include="..\Classes\ime.cpp" />
     <ClCompile Include="..\Classes\log.cpp" />
     <ClCompile Include="..\Classes\msg.cpp" />
     <ClCompile Include="..\Classes\platforms\win32\appbase_win32.cpp" />
@@ -112,7 +112,9 @@
     <ClCompile Include="..\Classes\tls.cpp" />
     <ClCompile Include="..\Classes\ui\button.cpp" />
     <ClCompile Include="..\Classes\ui\div.cpp" />
+    <ClCompile Include="..\Classes\ui\ime.cpp" />
     <ClCompile Include="..\Classes\ui\img9.cpp" />
+    <ClCompile Include="..\Classes\ui\label.cpp" />
     <ClCompile Include="dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
