@@ -22,29 +22,30 @@ namespace crossany{
 			int32_t dec(){ mref--; if (mref <= 0){ delete this; }; return mref; };
 
 		public:
-			GLuint mid;		// texture 编号。glGenTextures 获得的。
-			//rect mrc,mrcv;	// texture的实际大小、可见大小。
+			GLuint mid;		// texture id。glGenTextures 。
 			size msize;
 			std::atomic_int32_t mref;
 		};
-		class img : public node{
+		class img{
 		private:
 			img(){};
 			~img(){};
 		public:
-			static img* create(const pos2& _pos , const char*, ...); // 参数都是std::string类型的图片路径。
-			int32_t setidx(const int32_t& _idx){ if (_idx >= mimgs.size() || _idx < 0) return midx = 0; return (midx = _idx); };
+			static img* create(const pos2& _pos , const char*); // const char* filepath。
 			virtual void customdraw();
-			virtual void ontouchbegin(const msg*);
-			virtual void ontouchend(const msg*);
+			const rect getrect() const { return mrc; };
 		private:
-			std::vector<GLuint> mimgs;
-			int32_t midx;
+			//std::vector<GLuint> mimgs;
+			GLuint mimg;
+			rect mrc;
+			//int32_t midx;
 			//rect mrcshow;
 			static std::map < std::string, tex* > mtexs;
+		public:
+			
 		};
 
-		class img9 : public node{
+		class img9 {
 		public:
 			img9();
 			~img9();

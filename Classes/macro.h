@@ -18,5 +18,14 @@
 #define CROSSANY_API __declspec(dllimport)
 #endif
 
+#define X_VARP(varType, varName)\
+protected: varType m##varName;\
+public: virtual const varType get##varName(void) const {return (m##varName);};\
+public: virtual void set##varName( const varType var){ (m##varName) = (varType)var;}; 
+
+#define X_VAR_R(varType, varName)\
+protected: varType m##varName;\
+public: virtual const varType get##varName(void) const {return (m##varName);};
+
 
 #endif

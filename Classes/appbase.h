@@ -12,11 +12,13 @@
 namespace crossany{
 	class CROSSANY_API appbase{
 	public:
-		static bool painted;
+		
+		static void updateui();
 		appbase(){};
 		virtual ~appbase(){};
 		virtual void run();
 		virtual void addChild(node* _node, int32_t z = 0){
+			_node->setparent(&orz);
 			orz.addChild(_node, z);
 		}
 
@@ -28,7 +30,9 @@ namespace crossany{
 	private:
 		virtual bool init(){ return true; };
 		node orz;
+		
 		static size msize;
+		static bool painted;
 	public:
 		static int64_t alert(std::wstring msg, std::wstring title = L"msg", int64_t type = 0){ return 0; };
 		virtual void draw(){ orz.draw(); };

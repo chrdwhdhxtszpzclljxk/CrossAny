@@ -8,6 +8,7 @@ third_lib/lpng1617/projects/vstudio/Release/
 third_lib/lpng1617/projects/vstudio/ipch/
 third_lib/lpng1617/projects/vstudio/libpng/Debug/
 third_lib/lpng1617/projects/vstudio/zlib/Debug/
+third_lib/freetype-2.6/objs/vc2010/Win32/Debug/
 
 prj.win32/CrossAny.opensdf
 *.sdf

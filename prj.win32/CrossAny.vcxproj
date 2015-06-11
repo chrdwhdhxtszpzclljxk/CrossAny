@@ -89,6 +89,7 @@
     <ClInclude Include="..\Classes\coordinate.h" />
     <ClInclude Include="..\Classes\CrossAny.h" />
     <ClInclude Include="..\Classes\glview.h" />
+    <ClInclude Include="..\Classes\ime.h" />
     <ClInclude Include="..\Classes\log.h" />
     <ClInclude Include="..\Classes\msg.h" />
     <ClInclude Include="..\Classes\node.h" />
@@ -102,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\coordinate.cpp" />
+    <ClCompile Include="..\Classes\ime.cpp" />
     <ClCompile Include="..\Classes\log.cpp" />
     <ClCompile Include="..\Classes\msg.cpp" />
     <ClCompile Include="..\Classes\platforms\win32\appbase_win32.cpp" />

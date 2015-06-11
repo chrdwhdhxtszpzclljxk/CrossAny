@@ -9,20 +9,33 @@ button::~button(){
 }
 
 void button::customdraw(){
-	GLfloat R = (GLfloat)mrc.getw() / 2;
-	GLfloat Pi = 3.1415926f;
-	int n = 100;
-	glColor3f(1.0f, 1.0f, 0.0f);
-
-	glBegin(GL_POLYGON);//OpenGL要求：指定顶点的命令必须包含在glBegin函数之后，
-	//glEnd函数之前（否则指定的顶点将被忽略）。并由glBegin来指明如何使用这些点
-	//GL_POLYGON表示画多边形（由点连接成多边形）
-	for (int i = 0; i< n; ++i)
-		glVertex2f(R*cos(2 * Pi / n*i)+100, R*sin(2 * Pi / n*i));
-
-	glEnd();
-	glColor3f(1.0f, 1.0f, 0.0f);
-
+	if (midx >= 0 && midx < mimgs.size()){
+		mimgs[midx]->customdraw();
+	}
 }
+
+button* button::create(const rect& _rc, const char* path, ...){
+	button* ret = new button(); std::list<std::string> filelist;std::list<std::string>::iterator iter; std::string filepath;
+	if (ret != nullptr){ // 分配img成功！
+		filelist.push_back(path);
+		va_list argp; int argno = 0; char* para;
+		va_start(argp, path);
+		while (true){ // 遍历加载的img图片。
+			para = va_arg(argp, char*);
+			if (strlen(para) <= 1) break;
+			filelist.push_back(para);
+			argno++;
+		}
+		va_end(argp);
+		for (iter = filelist.begin(); iter != filelist.end(); iter++){
+			filepath = (*iter);
+			img* i = img::create(_rc.getpos(),filepath.c_str());
+			ret->mimgs.push_back(i);
+		}
+	}
+	return ret;
+}
+
+
 NS_CROSSANY_UI_END
 NS_CROSSANY_END

@@ -1,5 +1,11 @@
 
-node::node() : mtouchbegin(false){ }
+node::node() : mtouchbegin(false),mparent(nullptr){
+
+}
+
+node::node(node* _p) : mtouchbegin(false),mparent(_p){
+}
+
 node::~node(){ }
 
 void node::draw(){
@@ -24,6 +30,7 @@ void node::draw(){
 	}
 }
  void node::addChild(node* _node, int32_t _z){
+	 _node->setparent(this);
 	mnodes.resize(_z + 1);
 	if (mnodes[_z] == nullptr) mnodes[_z] = new nodelist();
 	mnodes[_z]->push_back(_node);

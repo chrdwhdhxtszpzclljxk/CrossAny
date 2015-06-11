@@ -8,7 +8,7 @@
 NS_CROSSANY_BEGIN
 
 
-void node::customevent(const UINT& _msg, const pos2& _p){
+int32_t node::customevent(const UINT& _msg, const pos2& _p){
 	switch (_msg){
 	case WM_LBUTTONDOWN:{
 		msg m(_p, this, nullptr);
@@ -18,10 +18,15 @@ void node::customevent(const UINT& _msg, const pos2& _p){
 		msg m(_p, this, nullptr);
 		ontouchend(&m);
 	}break;
+	case WM_MOUSEMOVE:{
+		msg m(_p, this, nullptr);
+		ontouchmove(&m);
+	}break;
 	}
+	return 0;
 }
 
-void node::onevent(const UINT& msg, const WPARAM& w, const LPARAM& l){
+int32_t node::onevent(const UINT& msg, const WPARAM& w, const LPARAM& l){
 	double x, y;
 	x = LOWORD(l); y = HIWORD(l);
 	pos2 pos(x, y);
@@ -36,6 +41,7 @@ void node::onevent(const UINT& msg, const WPARAM& w, const LPARAM& l){
 				(*iter)->onevent(msg, w, l);
 			}
 		}
+		return 0;
 }
 
 #include "node.hpp"

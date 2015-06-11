@@ -17,7 +17,7 @@ namespace crossany{
 		void set(const double& _x, const double& _y){ x = _x; y = _y; };
 		bool operator== (const pos2& _p) const{ return x == _p.x && y == _p.y; }
 	private:
-		double x,y;
+		double x, y;
 	public:
 		const static pos2 ZERO;
 	};
@@ -42,19 +42,21 @@ namespace crossany{
 
 	class CROSSANY_API rect{
 	public:
-		rect(){};
-		rect(const pos2& _pos,const size& _size):mpos(_pos),msize(_size){};
+		rect() : mpos(0,0),msize(0,0){};
+		rect(const pos2& _pos, const size& _size) : mpos(_pos), msize(_size){};
 		~rect(){};
 		double getw(){ return msize.getw(); };
 		double geth(){ return msize.geth(); };
-		double getx0(){ return mpos.getx(); }; // 左下角顶点
-		double gety0(){ return mpos.gety(); }; 
-		double getx1(){ return mpos.getx(); }; // 左上角顶点
+		double getx0(){ return mpos.getx(); };  // (left,bottom)
+		double gety0(){ return mpos.gety(); };
+		double getx1(){ return mpos.getx(); }; 
 		double gety1(){ return mpos.gety() + msize.geth(); };
-		double getx2(){ return mpos.getx() + msize.getw(); }; // 右上角顶点
+		double getx2(){ return mpos.getx() + msize.getw(); }; 
 		double gety2(){ return mpos.gety() + msize.geth(); };
-		double getx3(){ return mpos.getx() + msize.getw(); }; // 右下角顶点
+		double getx3(){ return mpos.getx() + msize.getw(); };
 		double gety3(){ return mpos.gety(); };
+		const pos2 getpos()const { return mpos; };
+		const size getsize()const { return msize; };
 		bool ptinrect(const pos2& _p){ if (_p.getx() >= getx0() && _p.getx() <= getx2() && _p.gety() >= gety0() && _p.gety() <= gety2()) return true; return false; };
 		void set(const pos2& _pos, const size& _size){ mpos = _pos; msize = _size; };
 		bool operator== (const rect& ar) const{ return mpos == ar.mpos && msize == ar.msize; };

@@ -6,6 +6,7 @@
 #include <math.h>
 #include "log.h"
 #include "ui/img9.h"
+#include "ime.h"
 
 
 NS_CROSSANY_BEGIN
@@ -339,12 +340,24 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {  
 	case WM_LBUTTONUP:{
 		ReleaseCapture();
 		pThis->onevent(uMsg, wParam, lParam);
-		appbase::painted = true;
+		appbase::updateui();
 	}break;
 	case WM_LBUTTONDOWN:{
 		SetCapture(hWnd);
 		pThis->onevent(uMsg, wParam, lParam);
-		appbase::painted = true;
+		appbase::updateui();
+	}break;
+	case WM_MOUSEMOVE:{
+		//pThis->onevent(uMsg, wParam, lParam);
+	}break;
+	case WM_CHAR:{
+		wchar_t* txt = (wchar_t*)&wParam;
+		wchar_t msg[128] = { 0 };
+		char utf8[128] = { 0 };
+		msg[0] = txt[0];
+		WideCharToMultiByte(CP_UTF8, 0, msg, -1, utf8, sizeof(utf8), nullptr, nullptr);
+		crossany::ui::ime::me()->insert(utf8);
+		crossany::log::otprint("ddd");
 	}break;
 	}
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);	// 向DefWindowProc传递所有未处理的消息。  
@@ -399,6 +412,11 @@ void appbase::run(){
 
 void appbase::onevent(const UINT& msg, const WPARAM& w, const LPARAM& l){
 	orz.onevent(msg, w, l);
+}
+
+void appbase::updateui(){
+	RedrawWindow(hWnd, NULL,NULL,RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE);
+	painted = true;
 }
 
 #include "appbase.hpp"
