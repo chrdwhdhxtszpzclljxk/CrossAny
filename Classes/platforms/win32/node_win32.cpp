@@ -30,7 +30,7 @@ int32_t node::onevent(const UINT& msg, const WPARAM& w, const LPARAM& l){
 	double x, y;
 	x = LOWORD(l); y = HIWORD(l);
 	pos2 pos(x, y);
-	if (mrc.ptinrect(pos) || msg == WM_LBUTTONUP){
+	if (mrc.ptinrect(pos) || (msg == WM_LBUTTONUP && mtouchbegin)){
 		customevent(msg, pos);
 	}
 		node::nodez::iterator z; node::nodelist::iterator iter;

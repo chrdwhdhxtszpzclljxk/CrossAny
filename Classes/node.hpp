@@ -1,9 +1,9 @@
 
-node::node() : mtouchbegin(false),mparent(nullptr){
+node::node() : mtouchbegin(false), mparent(nullptr), mfocus(false){
 
 }
 
-node::node(node* _p) : mtouchbegin(false),mparent(_p){
+node::node(node* _p) : mtouchbegin(false), mparent(_p), mfocus(false){
 }
 
 node::~node(){ }

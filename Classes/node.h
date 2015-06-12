@@ -35,6 +35,9 @@ namespace crossany{
 		virtual void ontouchbegin(const msg*){};
 		virtual void ontouchend(const msg*){};
 		virtual void ontouchmove(const msg*){};
+
+		void setrect(const pos2& _p, const size& _s){ mrc.set(_p, _s); };
+		bool mfocus;
 	protected:
 		rect mrc;
 		bool mtouchbegin;

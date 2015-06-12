@@ -96,6 +96,7 @@
     <ClInclude Include="..\Classes\tls.h" />
     <ClInclude Include="..\Classes\ui\button.h" />
     <ClInclude Include="..\Classes\ui\div.h" />
+    <ClInclude Include="..\Classes\ui\edit.h" />
     <ClInclude Include="..\Classes\ui\ime.h" />
     <ClInclude Include="..\Classes\ui\img9.h" />
     <ClInclude Include="..\Classes\ui\label.h" />
@@ -112,6 +113,7 @@
     <ClCompile Include="..\Classes\tls.cpp" />
     <ClCompile Include="..\Classes\ui\button.cpp" />
     <ClCompile Include="..\Classes\ui\div.cpp" />
+    <ClCompile Include="..\Classes\ui\edit.cpp" />
     <ClCompile Include="..\Classes\ui\ime.cpp" />
     <ClCompile Include="..\Classes\ui\img9.cpp" />
     <ClCompile Include="..\Classes\ui\label.cpp" />

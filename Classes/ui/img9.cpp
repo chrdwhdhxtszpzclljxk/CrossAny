@@ -63,9 +63,9 @@ img* img::create(const pos2& _pos, const char* path){
 }
 
 void img::customdraw(){
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_BLEND);
-	glEnable(GL_ALPHA_TEST);
+	//glEnable(GL_TEXTURE_2D);
+	//glEnable(GL_BLEND);
+	//glEnable(GL_ALPHA_TEST);
 	glBindTexture(GL_TEXTURE_2D, mimg);
 	glColor3f(1.0f, 1.0f, 1.0f); // 清除当前颜色。不然tex会变色。
 	glBegin(GL_QUADS);
@@ -75,9 +75,9 @@ void img::customdraw(){
 	glTexCoord2f(1.0f, 1.0f); glVertex3f(mrc.getx2(), appbase::geth() - mrc.gety2(), 1.0f);//右上角
 	glTexCoord2f(1.0f, 0.0f); glVertex3f(mrc.getx3(), appbase::geth() - mrc.gety3(), 1.0f);//右下角
 	glEnd();
-	glDisable(GL_ALPHA_TEST); 
-	glDisable(GL_BLEND);   
-	glDisable(GL_TEXTURE_2D);
+	//glDisable(GL_ALPHA_TEST); 
+	//glDisable(GL_BLEND);   
+	//glDisable(GL_TEXTURE_2D);
 }
 
 img9::img9(){

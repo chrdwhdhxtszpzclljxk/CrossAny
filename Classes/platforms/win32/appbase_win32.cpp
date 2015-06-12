@@ -143,9 +143,15 @@ int DrawGLScene(appbase* pThis){// 从这里开始进行所有的绘制
 	glEnd();
 */
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Clear the screen.
-
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+	glEnable(GL_ALPHA_TEST);
 
 	pThis->draw();
+
+	glDisable(GL_ALPHA_TEST);
+	glDisable(GL_BLEND);
+	glDisable(GL_TEXTURE_2D);
 
 	return TRUE;// 一切OK  
 }

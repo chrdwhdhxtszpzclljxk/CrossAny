@@ -1,32 +1,32 @@
-#include "label.h"
+#include "edit.h"
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <ftglyph.h>
 #include <ftoutln.h>
 #include <fttrigon.h>
 #include "appbase.h"
+#include "label.h"
+#include "log.h"
 
 NS_CROSSANY_BEGIN
 NS_CROSSANY_UI_BEGIN
 
-label::label()
-{
-	
+edit::edit() {
 }
 
-label::~label()
-{
+edit::~edit(){
 }
 
-bool label::create(const wchar_t* _txt, const char* fontfile, const int32_t fontsize){
+bool edit::create(const wchar_t* _placehoder, const char* fontfile, const int32_t& fontsize){
+	mplaceholder = _placehoder;
 	FT_Library lib; FT_Face face; FT_Error err;  FT_ULong ch; int32_t i, count; int32_t x = 0, y = 0;
 	if (FT_Init_FreeType(&lib) == 0){
 		if ((err = FT_New_Face(lib, fontfile, 0, &face)) == 0){
 			if (FT_Select_Charmap(face, FT_ENCODING_UNICODE) == 0){
 				FT_Set_Pixel_Sizes(face, fontsize, 0);
-				count = wcslen(_txt);
+				count = wcslen(_placehoder);
 				for (i = 0; i < count; i++){
-					ch = _txt[i];
+					ch = _placehoder[i];
 					if (FT_Load_Char(face, ch, /*FT_LOAD_RENDER|*/FT_LOAD_FORCE_AUTOHINT | (TRUE ? FT_LOAD_TARGET_NORMAL : FT_LOAD_MONOCHROME | FT_LOAD_TARGET_MONO)) == 0){
 						FT_Glyph glyph;	// 得到字模
 						if (FT_Get_Glyph(face->glyph, &glyph) == 0){ // 把字形图像从字形槽复制到新的FT_Glyph对象glyph中。这个函数返回一个错误码并且设置glyph。 
@@ -66,7 +66,7 @@ bool label::create(const wchar_t* _txt, const char* fontfile, const int32_t font
 							glTexEnvi(GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_REPLACE);								//纹理进行混合
 
 							delete[] pBuf;
-							mtex.push_back(tex);
+							mtexplaceholder.push_back(tex);
 						}
 
 					}
@@ -79,41 +79,70 @@ bool label::create(const wchar_t* _txt, const char* fontfile, const int32_t font
 	return true;
 }
 
-void label::customdraw(){
+
+void edit::customdraw(){
 	int32_t sx = 0, sy = 0, maxH = 0, height = 0;
 	std::vector<txtchar>::iterator iter;
-	size_t nLen = mtex.size();
-	sx = mrc.getpos().getx(); sy = mrc.getpos().gety();
-	if (nLen > 0){
-		height = mtex.begin()->m_Height;
-		for (iter = mtex.begin(); iter != mtex.end(); iter++){
-			txtchar& tex = *iter;
-			glBindTexture(GL_TEXTURE_2D, tex.texid);							//绑定到目标纹理
-			int w = tex.m_Width;
-			int h = tex.m_Height;
+	if (mfocus){ // get input focus
 
-			int ch_x = sx + tex.m_delta_x;
-			int ch_y = sy + height - h - tex.m_delta_y;
+	} else{ // losted input focus
+		if (mtxtval.empty()){
+			size_t nLen = mtexplaceholder.size();
+			sx = mrc.getpos().getx(); sy = mrc.getpos().gety();
+			if (nLen > 0){
+				height = mtexplaceholder.begin()->m_Height;
+				for (iter = mtexplaceholder.begin(); iter != mtexplaceholder.end(); iter++){
+					txtchar& tex = *iter;
+					glBindTexture(GL_TEXTURE_2D, tex.texid);							//绑定到目标纹理
+					int w = tex.m_Width;
+					int h = tex.m_Height;
 
-			if (maxH < h) maxH = h;
-			glBegin(GL_QUADS);													 // 定义一个或一组原始的顶点
-			{
-				glTexCoord2f(0.0f, 1.0f); glVertex3f(ch_x, appbase::geth() - ch_y, 1.0f); // 左上角
-				glTexCoord2f(1.0f, 1.0f); glVertex3f(ch_x + w, appbase::geth() - ch_y, 1.0f);//右上角
-				glTexCoord2f(1.0f, 0.0f); glVertex3f(ch_x + w, appbase::geth() - (ch_y + h), 1.0f);//右下角
-				glTexCoord2f(0.0f, 0.0f); glVertex3f(ch_x, appbase::geth() - (ch_y + h), 1.0f);//左下角
+					int ch_x = sx + tex.m_delta_x;
+					int ch_y = sy + height - h - tex.m_delta_y;
+
+					if (maxH < h) maxH = h;
+					glBegin(GL_QUADS);													 // 定义一个或一组原始的顶点
+					{
+						glTexCoord2f(0.0f, 1.0f); glVertex3f(ch_x, appbase::geth() - ch_y, 1.0f); // 左上角
+						glTexCoord2f(1.0f, 1.0f); glVertex3f(ch_x + w, appbase::geth() - ch_y, 1.0f);//右上角
+						glTexCoord2f(1.0f, 0.0f); glVertex3f(ch_x + w, appbase::geth() - (ch_y + h), 1.0f);//右下角
+						glTexCoord2f(0.0f, 0.0f); glVertex3f(ch_x, appbase::geth() - (ch_y + h), 1.0f);//左下角
+					}
+					glEnd();
+					sx += tex.m_adv_x;
+					//if (sx > x + maxW)
+					//{
+					//	sx = x; sy += maxH + 12;
+					//}
+					//break;
+				}
 			}
-			glEnd();
-			sx += tex.m_adv_x;
-			//if (sx > x + maxW)
-			//{
-			//	sx = x; sy += maxH + 12;
-			//}
-			//break;
 		}
 	}
+}
+
+void edit::ontouchbegin(const msg*){
+	mtouchbegin = true;
+	if (appbase::mfocus != nullptr){
+		if (appbase::mfocus != this){
+			appbase::mfocus->mfocus = false;
+			appbase::mfocus = this;
+		}
+	}
+	mfocus = true;
+
+
 
 }
+
+void edit::ontouchend(const msg* m){
+	if (mtouchbegin){
+		//crossany::log("ok...");
+		crossany::log::otprint("test");
+	}
+	mtouchbegin = false;
+}
+
 
 NS_CROSSANY_UI_END
 NS_CROSSANY_END
