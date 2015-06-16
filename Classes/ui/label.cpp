@@ -112,6 +112,18 @@ void label::customdraw(){
 			//break;
 		}
 	}
+	/*
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glBegin(GL_QUADS);													 // 定义一个或一组原始的顶点
+	{
+		glVertex3f(mrc.getx0(), mrc.gety0(), 1.0f); // 左上角
+		glVertex3f(mrc.getx1(), mrc.gety1(), 1.0f); // 左上角
+		glVertex3f(mrc.getx2(), mrc.gety2(), 1.0f); // 左上角
+		glVertex3f(mrc.getx3(), mrc.gety3(), 1.0f); // 左上角
+	}
+	glEnd();
+	glColor3f(1.0f, 1.0f, 1.0f);
+	*/
 
 }
 

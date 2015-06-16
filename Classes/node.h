@@ -32,10 +32,11 @@ namespace crossany{
 		virtual int32_t customevent(const UINT&, const pos2&);
 		virtual int32_t onevent(const UINT&, const WPARAM&, const LPARAM&);
 #endif
-		virtual void ontouchbegin(const msg*){};
-		virtual void ontouchend(const msg*){};
-		virtual void ontouchmove(const msg*){};
-
+		virtual void ontimer(){};
+		virtual void ontouchbegin(const msg*);
+		virtual void ontouchend(const msg*);
+		virtual void ontouchmove(const msg*);
+		virtual void onsetfocus(const bool&);
 		void setrect(const pos2& _p, const size& _s){ mrc.set(_p, _s); };
 		bool mfocus;
 	protected:

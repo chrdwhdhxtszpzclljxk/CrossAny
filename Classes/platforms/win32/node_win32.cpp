@@ -44,7 +44,8 @@ int32_t node::onevent(const UINT& msg, const WPARAM& w, const LPARAM& l){
 		return 0;
 }
 
-#include "node.hpp"
 
 
 NS_CROSSANY_END
+
+#include "node.hpp"

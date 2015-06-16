@@ -4,6 +4,7 @@
 #include "node.h"
 #include "img9.h"
 #include "label.h"
+#include <chrono>
 
 namespace crossany{
 	namespace ui{
@@ -13,11 +14,14 @@ namespace crossany{
 			~edit();
 			bool create(const wchar_t* _placehoder,const char* file, const int32_t& _size);
 			virtual void customdraw();
-			virtual void ontouchbegin(const msg*);
-			virtual void ontouchend(const msg*);
+			virtual void onsetfocus(const bool&);
+			virtual void ontimer();
 		private:
 			std::wstring mplaceholder,mtxtval;
 			std::vector<txtchar> mtex,mtexplaceholder;
+			int32_t mmaxh;
+			bool mcaret;
+			std::chrono::system_clock::time_point mlast;
 			
 		};
 	}

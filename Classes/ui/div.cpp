@@ -38,28 +38,28 @@ bool div::create(const rect& _rc, const char* path, ...){
 }
 
 void div::customdraw(){
+	node::customdraw();
 	if (midx >= 0 && midx < mimgs.size()){
 		mimgs[midx]->customdraw();
 	}
+
 }
 
-void div::ontouchbegin(const msg*){
+void div::ontouchbegin(const msg* _msg){
+	node::ontouchbegin(_msg);
 	midx = 1;
 	if (midx >= mimgs.size()) midx = 0;
 	mtouchbegin = true;
 }
 
 void div::ontouchend(const msg* m){
+	node::ontouchend(m);
 	midx = 0;
 	if (midx >= mimgs.size()) midx = 0;
-	if (mtouchbegin){
-		//crossany::log("ok...");
-		crossany::log::otprint("test");
-	}
-	mtouchbegin = false;
 }
 
-void div::ontouchmove(const msg*){
+void div::ontouchmove(const msg* _msg){
+	node::ontouchmove(_msg);
 }
 
 

@@ -1,3 +1,8 @@
+#include "node.h"
+#include "appbase.h"
+#include "log.h"
+
+NS_CROSSANY_BEGIN
 
 node::node() : mtouchbegin(false), mparent(nullptr), mfocus(false){
 
@@ -34,4 +39,30 @@ void node::draw(){
 	mnodes.resize(_z + 1);
 	if (mnodes[_z] == nullptr) mnodes[_z] = new nodelist();
 	mnodes[_z]->push_back(_node);
-}
+ }
+
+ void node::ontouchbegin(const msg*){
+	 if (appbase::mfocus != this){
+		 if (appbase::mfocus != nullptr) appbase::mfocus->onsetfocus(false);
+		 appbase::mfocus = this;
+		 appbase::mfocus->onsetfocus(true);
+	 }
+ }
+
+ void node::ontouchend(const msg*){
+	 if (mtouchbegin){
+		 //crossany::log("ok...");
+		 crossany::log::otprint("test");
+	 }
+	 mtouchbegin = false;
+ }
+
+ void node::onsetfocus(const bool& _focus){
+	 mfocus = _focus;
+	 appbase::updateui();
+ }
+
+ void node::ontouchmove(const msg*){
+ }
+
+ NS_CROSSANY_END

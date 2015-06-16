@@ -20,7 +20,7 @@ const static TCHAR* tcWndClass = L"opengl_crossany_wnd1.0";			// 主窗口类名
 int64_t frames = 0;
 HGLRC hRC = NULL;     // 永久着色描述表  
 HDC hDC = NULL;           // 私有GDI设备描述表  
-HWND hWnd = NULL;     // 保存我们的窗口句柄  
+HWND appbase::hWnd = NULL;     // 保存我们的窗口句柄  
 HINSTANCE hInstance;    // 保存程序的实例  
 bool keys[256];         // 用于键盘例程的数组  
 bool active = TRUE;       // 窗口的活动标志，缺省为TRUE  
@@ -68,12 +68,13 @@ GLvoid ReSizeGLScene(appbase* pThis,GLsizei width, GLsizei height){// 重置并�
 }
 int InitGL(GLvoid){// 此处开始对OpenGL进行所有设置  
 	glShadeModel(GL_SMOOTH);// 启用阴影平滑  
-	glClearColor(0.65f, 0.65f, 0.65f, 0.0f);// 黑色背景  
-	glClearDepth(1.0f);// 设置深度缓存  
+	glClearColor(0.65f, 0.65f, 0.65f, 1.0f);// 黑色背景  
+	//glClearDepth(1.0f);// 设置深度缓存  
 	glEnable(GL_DEPTH_TEST);// 启用深度测试  
 	glDepthFunc(GL_LEQUAL);// 所作深度测试的类型  
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);// 真正精细的透视修正  
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);// 这里的src_alpha就是纹理的alpha通道的数据了
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	glTexEnvi(GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_BLEND);
 
 	//glEnable(GL_TEXTURE_2D);
@@ -165,13 +166,13 @@ GLvoid KillGLWindow(GLvoid){// 正常销毁窗口
 		if (!wglDeleteContext(hRC))	MessageBox(NULL, L"Release Rendering Context Failed.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);// 能否删除RC  
 		hRC = NULL;// 将RC设为NULL  
 	}
-	if (hDC && !ReleaseDC(hWnd, hDC)){// 能否释放DC  
+	if (hDC && !ReleaseDC(appbase::hWnd, hDC)){// 能否释放DC  
 		MessageBox(NULL, L"Release Device Context Failed.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
 		hDC = NULL;// 将DC设为NULL  
 	}
-	if (hWnd && !DestroyWindow(hWnd)){// 能否销毁窗口  
+	if (appbase::hWnd && !DestroyWindow(appbase::hWnd)){// 能否销毁窗口  
 		MessageBox(NULL, L"Could Not Release hWnd.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
-		hWnd = NULL;// 将hWnd设为NULL  
+		appbase::hWnd = NULL;// 将hWnd设为NULL  
 	}
 	if (!UnregisterClass(tcWndClass, hInstance)){// 能否注销窗口类  
 		MessageBox(NULL, L"Could Not Unregister Class.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
@@ -228,7 +229,7 @@ BOOL CreateGLWindow(appbase* pThis,const TCHAR* title, int width, int height, in
 		dwStyle = WS_OVERLAPPEDWINDOW;                                // 窗体风格  
 	}
 	AdjustWindowRectEx(&rc, dwStyle, FALSE, dwExStyle);// 调整窗口达到真正要求的大小  
-	if (!(hWnd = CreateWindowEx(dwExStyle,           // 扩展窗体风格  
+	if (!(appbase::hWnd = CreateWindowEx(dwExStyle,           // 扩展窗体风格  
 		tcWndClass,                                           // 类名字  
 		title,                                                      // 窗口标题  
 		WS_CLIPSIBLINGS |                                   // 必须的窗体风格属性  
@@ -266,7 +267,7 @@ BOOL CreateGLWindow(appbase* pThis,const TCHAR* title, int width, int height, in
 		0,                                                      // 保留  
 		0, 0, 0                                             // 忽略层遮罩  
 	};
-	if (!(hDC = GetDC(hWnd))){// 取得设备描述表了么  
+	if (!(hDC = GetDC(appbase::hWnd))){// 取得设备描述表了么  
 		KillGLWindow();// 重置显示区  
 		MessageBox(NULL, L"Can't Create A GL Device Context.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
 		return FALSE;// 返回 FALSE  
@@ -294,9 +295,9 @@ BOOL CreateGLWindow(appbase* pThis,const TCHAR* title, int width, int height, in
 
 	const char* ver = (char*)glGetString(GL_VERSION);
 
-	ShowWindow(hWnd, SW_SHOW);       // 显示窗口  
-	SetForegroundWindow(hWnd);      // 略略提高优先级  
-	SetFocus(hWnd);                         // 设置键盘的焦点至此窗口  
+	ShowWindow(appbase::hWnd, SW_SHOW);       // 显示窗口  
+	SetForegroundWindow(appbase::hWnd);      // 略略提高优先级  
+	SetFocus(appbase::hWnd);                         // 设置键盘的焦点至此窗口  
 	ReSizeGLScene(pThis,width, height);       // 设置透视 GL 屏幕  
 	if (!InitGL()){// 初始化新建的GL窗口  
 		KillGLWindow();// 重置显示区  
@@ -358,12 +359,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {  
 	}break;
 	case WM_CHAR:{
 		wchar_t* txt = (wchar_t*)&wParam;
-		wchar_t msg[128] = { 0 };
-		char utf8[128] = { 0 };
-		msg[0] = txt[0];
-		WideCharToMultiByte(CP_UTF8, 0, msg, -1, utf8, sizeof(utf8), nullptr, nullptr);
-		crossany::ui::ime::me()->insert(utf8);
+		//wchar_t msg[128] = { 0 };
+		//char utf8[128] = { 0 };
+		//msg[0] = txt[0];
+		//WideCharToMultiByte(CP_UTF8, 0, msg, -1, utf8, sizeof(utf8), nullptr, nullptr);
+		crossany::ui::ime::me()->insert(txt);
 		crossany::log::otprint("ddd");
+	}break;
+	case WM_TIMER:{
+		appbase::ontimer();
 	}break;
 	}
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);	// 向DefWindowProc传递所有未处理的消息。  

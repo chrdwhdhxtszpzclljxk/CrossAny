@@ -11,12 +11,14 @@ namespace crossany{
 			static ime* me();
 			bool attach();
 			bool detach();
-			void insert(const char*);
+			void insert(const wchar_t*);
 			void remove();
+			void setpos(const int32_t&);
 		private:
 			ime();
 			~ime();
-			std::string mtxt;
+			std::wstring mtxt;
+			int32_t mpos;
 		};
 
 	}

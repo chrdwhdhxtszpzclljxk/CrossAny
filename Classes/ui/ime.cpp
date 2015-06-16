@@ -4,13 +4,11 @@
 NS_CROSSANY_BEGIN
 NS_CROSSANY_UI_BEGIN
 
-ime::ime()
-{
+ime::ime(){
+	mpos = 0;
 }
 
-
-ime::~ime()
-{
+ime::~ime(){
 }
 
 ime* ime::me(){
@@ -29,13 +27,17 @@ bool ime::detach(){
 	return true;
 }
 
-void ime::insert(const char* _txt){
+void ime::insert(const wchar_t* _txt){
 	mtxt.append(_txt);
-	log::otprint(mtxt.c_str());
+	//log::otprint(mtxt.c_str());
 }
 
 void ime::remove(){
 
+}
+
+void ime::setpos(const int32_t& _pos){
+	mpos = _pos;
 }
 
 NS_CROSSANY_UI_END
