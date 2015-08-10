@@ -4,6 +4,7 @@
 #include "appbase.h"
 #include "log.h"
 
+
 NS_CROSSANY_BEGIN
 NS_CROSSANY_UI_BEGIN
 
@@ -18,30 +19,47 @@ tex* tex::create(const GLuint& _id, const size& _size){
 	return ret;
 }
 
+void errout(const char* func) {
+	GLenum err = glGetError();
+	if (err != GL_NO_ERROR)	{
+		log::otprint("%s error:%d",func,err);
+	}
+}
+
 img* img::create(const pos2& _pos, const char* path){
 	img* ret = new img(); size sizeimg;
-	GLuint texid[2]; static std::map < std::string, tex* >::iterator i;
+	GLuint texid[2] = {0}; static std::map < std::string, tex* >::iterator i;
 	if (ret != nullptr){ // 分配img成功！
 		i = mtexs.find(path);
 		if (i == mtexs.end()){ // 要加载的图片没有在tex缓存中，进行加载。
 			png_image png = { 0 };
 			memset(&png, 0, sizeof(png));
 			png.version = PNG_IMAGE_VERSION;
-			png_image_begin_read_from_file(&png, path);
+			int a= png_image_begin_read_from_file(&png, path);
+			if (a <= 0) {
+				OutputDebugStringA("png_image_begin_read_from_file");
+			}
 			png.format = PNG_FORMAT_RGBA; // 按RGBA读取文件！
 			int64_t tmp = PNG_IMAGE_SAMPLE_SIZE(png.format);
 			GLint interformat = PNG_IMAGE_SAMPLE_CHANNELS(png.format);
 			tmp = PNG_IMAGE_SAMPLE_COMPONENT_SIZE(png.format);
 			int32_t buffersize = PNG_IMAGE_SIZE(png);
+			log::otprint("buffersize:%d", buffersize);
 			char* buffer = new char[buffersize];
-			png_image_finish_read(&png, nullptr, buffer, 0, nullptr);
+			a = png_image_finish_read(&png, nullptr, buffer, 0, nullptr);
+			log::otprint("png_image_finish_read:%d",a);
 			//png.opaque = 0;
 			//png_image_write_to_file(&png, "ui/test.png",0 , buffer, 0, 0);
 			sizeimg.set(png.width, png.height);
 			glGenTextures(1, texid);
+			errout("glGenTextures");
 			glBindTexture(GL_TEXTURE_2D, texid[0]);
-			glTexImage2D(GL_TEXTURE_2D, 0, interformat, png.width, png.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+			errout("glBindTexture");
+			log::otprint("format:%d width:%d height:%d", interformat,png.width,png.height);
+			glTexImage2D(GL_TEXTURE_2D, 0, interformat, png.width, png.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer); // ?????2?N??
+			errout("glTexImage2D");
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			errout("glTexParameteri"); GL_INVALID_ENUM; GL_MAX_TEXTURE_SIZE;
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);

@@ -5,22 +5,28 @@
 #include <ui/div.h>
 #include <ui/label.h>
 #include <ui/edit.h>
+#include <log.h>
 
 myapp::myapp(){}
 myapp::~myapp(){}
 void myapp::run(){ appbase::run(); };
 bool myapp::init(){
+	const GLubyte* OpenGLVersion = glGetString(GL_VERSION);
+	GLint max;
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max);
+	log::otprint("GL_MAX_TEXTURE_SIZE:%d",max);
+	//MessageBoxA(NULL,(char*)OpenGLVersion,"hello",MB_OK);
 	//crossany::ui::div* img0 = crossany::ui::button::create(crossany::rect(crossany::pos2(0, 80), crossany::size(30, 30)), "ui/button.png", "ui/buttonp.png", "");
 	crossany::ui::div* div0 = new crossany::ui::div();
 	div0->create(crossany::rect(crossany::pos2(0, 80), crossany::size(30, 30)), "ui/button.png", "ui/buttonp.png", "");
 	addChild(div0);
 	crossany::ui::label* label0 = new crossany::ui::label();
-	label0->create(L"ÄúºÃ£¬½ñÌìÃ»ÓÐÏÂÓê°¡£¡", "D:\\DEVTOOLS\\project\\github\\CrossAny\\prj.win32\\CrossAnyTest\\ui\\fonts/msyh.ttf", 20);
+	label0->create(L"hello", "ui\\fonts/msyh.ttf", 20);
 	addChild(label0);
 	label0->setrect(crossany::pos2(100, 200), crossany::size(500, 100));
 
 	crossany::ui::edit* edit0 = new crossany::ui::edit();
-	edit0->create(L"ÄúºÃ£¬½ñÌìÃ»ÓÐÏÂÓê°¡£¡", "D:\\DEVTOOLS\\project\\github\\CrossAny\\prj.win32\\CrossAnyTest\\ui\\fonts/msyh.ttf", 20);
+	edit0->create(L"hello", "ui\\fonts/msyh.ttf", 20);
 	addChild(edit0);
 	edit0->setrect(crossany::pos2(100, 300), crossany::size(500, 100));
 
