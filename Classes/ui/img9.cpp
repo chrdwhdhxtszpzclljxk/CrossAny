@@ -26,6 +26,46 @@ void errout(const char* func) {
 	}
 }
 
+void adj_w_h(int32_t& w, int32_t& h) {
+	if (w < 4)
+		w = 4;
+	if (w < 8)
+		w = 8;
+	else if (w < 16)
+		w = 16;
+	else if (w < 32)
+		w = 32;
+	else if (w < 64)
+		w = 64;
+	else if (w < 128)
+		w = 128;
+	else if (w < 256)
+		w = 256;
+	else if (w < 512)
+		w = 512;
+	else if (w < 1024)
+		w = 1024;
+
+	if (h < 4)
+		h = 4;
+	if (h < 8)
+		h = 8;
+	else if (h < 16)
+		h = 16;
+	else if (h < 32)
+		h = 32;
+	else if (h < 64)
+		h = 64;
+	else if (h < 128)
+		h = 128;
+	else if (h < 256)
+		h = 256;
+	else if (h < 512)
+		h = 512;
+	else if (h < 1024)
+		h = 1024;
+}
+
 img* img::create(const pos2& _pos, const char* path){
 	img* ret = new img(); size sizeimg;
 	GLuint texid[2] = {0}; static std::map < std::string, tex* >::iterator i;
@@ -36,27 +76,36 @@ img* img::create(const pos2& _pos, const char* path){
 			memset(&png, 0, sizeof(png));
 			png.version = PNG_IMAGE_VERSION;
 			int a= png_image_begin_read_from_file(&png, path);
-			if (a <= 0) {
-				OutputDebugStringA("png_image_begin_read_from_file");
-			}
+			if (a <= 0) {	OutputDebugStringA("png_image_begin_read_from_file");	}
 			png.format = PNG_FORMAT_RGBA; // 按RGBA读取文件！
 			int64_t tmp = PNG_IMAGE_SAMPLE_SIZE(png.format);
 			GLint interformat = PNG_IMAGE_SAMPLE_CHANNELS(png.format);
 			tmp = PNG_IMAGE_SAMPLE_COMPONENT_SIZE(png.format);
 			int32_t buffersize = PNG_IMAGE_SIZE(png);
+			int32_t wt = png.width;
+			int32_t ht = png.height;
+			adj_w_h(wt, ht);
 			log::otprint("buffersize:%d", buffersize);
-			char* buffer = new char[buffersize];
-			a = png_image_finish_read(&png, nullptr, buffer, 0, nullptr);
+			char* buffer0 = new char[buffersize];
+			char* buffer = new char[wt * ht * 4];
+			memset(buffer, 0xff, wt*ht * 4);
+			a = png_image_finish_read(&png, nullptr, buffer0, 0, nullptr);
+			for (int z = 0; z < png.height;z++) {
+				//for (int y = 0; y < png.height; y++) {
+					memcpy(buffer + z * wt * 4, buffer0 + z * png.width * 4, png.width * 4);
+				//}
+			}
+
 			log::otprint("png_image_finish_read:%d",a);
 			//png.opaque = 0;
 			//png_image_write_to_file(&png, "ui/test.png",0 , buffer, 0, 0);
-			sizeimg.set(png.width, png.height);
+			sizeimg.set(wt, ht);
 			glGenTextures(1, texid);
 			errout("glGenTextures");
 			glBindTexture(GL_TEXTURE_2D, texid[0]);
 			errout("glBindTexture");
-			log::otprint("format:%d width:%d height:%d", interformat,png.width,png.height);
-			glTexImage2D(GL_TEXTURE_2D, 0, interformat, png.width, png.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer); // ?????2?N??
+			log::otprint("format:%d width:%d height:%d", interformat,wt,ht);
+			glTexImage2D(GL_TEXTURE_2D, 0, interformat, wt, ht, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer); // ?????2?N??
 			errout("glTexImage2D");
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			errout("glTexParameteri"); GL_INVALID_ENUM; GL_MAX_TEXTURE_SIZE;
@@ -64,6 +113,7 @@ img* img::create(const pos2& _pos, const char* path){
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 			delete[] buffer;
+			delete[] buffer0;
 			png_image_free(&png);
 			ret->mimg = texid[0];
 			mtexs[path] = tex::create(texid[0], sizeimg);
