@@ -14,6 +14,10 @@ void button::customdraw(){
 	}
 }
 
+int32_t button::ontouchmove(const msg*) {
+	return 1;
+}
+
 button* button::create(const rect& _rc, const char* path, ...){
 	button* ret = new button(); std::list<std::string> filelist;std::list<std::string>::iterator iter; std::string filepath;
 	if (ret != nullptr){ // ·ÖÅäimg³É¹¦£¡
@@ -32,6 +36,9 @@ button* button::create(const rect& _rc, const char* path, ...){
 			img* i = img::create(_rc.getpos(),filepath.c_str());
 			ret->mimgs.push_back(i);
 		}
+		ret->mrc = _rc;
+		//ret->mpos = _rc.getpos();
+		//ret->msize = _rc.getsize();
 	}
 	return ret;
 }

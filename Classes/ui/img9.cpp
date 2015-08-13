@@ -88,7 +88,7 @@ img* img::create(const pos2& _pos, const char* path){
 			log::otprint("buffersize:%d", buffersize);
 			char* buffer0 = new char[buffersize];
 			char* buffer = new char[wt * ht * 4];
-			memset(buffer, 0xff, wt*ht * 4);
+			memset(buffer, 0x00, wt*ht * 4);
 			a = png_image_finish_read(&png, nullptr, buffer0, 0, nullptr);
 			for (int z = 0; z < png.height;z++) {
 				//for (int y = 0; y < png.height; y++) {
@@ -106,6 +106,7 @@ img* img::create(const pos2& _pos, const char* path){
 			errout("glBindTexture");
 			log::otprint("format:%d width:%d height:%d", interformat,wt,ht);
 			glTexImage2D(GL_TEXTURE_2D, 0, interformat, wt, ht, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer); // ?????2?N??
+			//glTexSubImage2D(GL_TEXTURE_2D, 0, 200, 200, png.width, png.height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 			errout("glTexImage2D");
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			errout("glTexParameteri"); GL_INVALID_ENUM; GL_MAX_TEXTURE_SIZE;
@@ -135,7 +136,7 @@ void img::customdraw(){
 	//glEnable(GL_BLEND);
 	//glEnable(GL_ALPHA_TEST);
 	glBindTexture(GL_TEXTURE_2D, mimg);
-	glColor3f(1.0f, 1.0f, 1.0f); // 清除当前颜色。不然tex会变色。
+	glColor4f(1.0f, 1.0f, 1.0f,1.0f); // 清除当前颜色。不然tex会变色。
 	glBegin(GL_QUADS);
 	// 0.0是纹理的左侧，0.5是纹理的中点，1.0是纹理的右侧 . 0.0是纹理的底部，0.5是纹理的中点，1.0是纹理的顶部。
 	glTexCoord2f(0.0f, 0.0f); glVertex3f(mrc.getx0(), appbase::geth() - mrc.gety0(), 1.0f);//左下角

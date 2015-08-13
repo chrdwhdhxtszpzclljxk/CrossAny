@@ -341,7 +341,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {  
 		return 0;// 返回  
 	}break;
 	case WM_SIZE:{
-		ReSizeGLScene(pThis,LOWORD(lParam), HIWORD(lParam));
+		int32_t w = LOWORD(lParam);
+		int32_t h = HIWORD(lParam);
+		ReSizeGLScene(pThis,w, h);
+		pThis->resize(crossany::size(w, h));
 		return 0;
 	}break;
 	case WM_LBUTTONUP:{
@@ -355,7 +358,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {  
 		appbase::updateui();
 	}break;
 	case WM_MOUSEMOVE:{
-		//pThis->onevent(uMsg, wParam, lParam);
+		pThis->onevent(uMsg, wParam, lParam);
 	}break;
 	case WM_CHAR:{
 		wchar_t* txt = (wchar_t*)&wParam;

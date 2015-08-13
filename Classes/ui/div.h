@@ -14,9 +14,9 @@ namespace crossany{
 			int32_t setidx(const int32_t& _idx){ if (_idx >= mimgs.size() || _idx < 0) return midx = 0; return (midx = _idx); };
 
 			virtual void customdraw();
-			virtual void ontouchbegin(const msg*);
-			virtual void ontouchend(const msg*);
-			virtual void ontouchmove(const msg*);
+			virtual int32_t ontouchbegin(const msg*);
+			virtual int32_t ontouchend(const msg*);
+			virtual int32_t ontouchmove(const msg*);
 
 		private:
 			std::vector<img*> mimgs;

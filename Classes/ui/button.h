@@ -15,6 +15,10 @@ namespace crossany{
 		public:
 			static button* create(const rect& rc, const char*, ...);
 			virtual void customdraw();
+			virtual int32_t ontouchmove(const msg*);
+		protected:
+			//pos2 mpos;
+			//size msize;
 		private:
 			std::vector<img*> mimgs;
 			int32_t midx;

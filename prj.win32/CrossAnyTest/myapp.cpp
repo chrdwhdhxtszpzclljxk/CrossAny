@@ -17,9 +17,9 @@ bool myapp::init(){
 	log::otprint("GL_MAX_TEXTURE_SIZE:%d",max);
 	//MessageBoxA(NULL,(char*)OpenGLVersion,"hello",MB_OK);
 	//crossany::ui::div* img0 = crossany::ui::button::create(crossany::rect(crossany::pos2(0, 80), crossany::size(30, 30)), "ui/button.png", "ui/buttonp.png", "");
-	crossany::ui::div* div0 = new crossany::ui::div();
-	div0->create(crossany::rect(crossany::pos2(0, 80), crossany::size(30, 30)), "ui/button.png", "ui/buttonp.png", "");
-	addChild(div0);
+	//crossany::ui::div* div0 = new crossany::ui::div();
+	//div0->create(crossany::rect(crossany::pos2(0, 80), crossany::size(30, 30)), "ui/button.png", "ui/buttonp.png", "");
+	//addChild(div0);
 	crossany::ui::label* label0 = new crossany::ui::label();
 	label0->create(L"hello", "ui\\fonts/msyh.ttf", 20);
 	addChild(label0);
@@ -29,6 +29,9 @@ bool myapp::init(){
 	edit0->create(L"hello", "ui\\fonts/msyh.ttf", 20);
 	addChild(edit0);
 	edit0->setrect(crossany::pos2(100, 300), crossany::size(500, 100));
+
+	crossany::ui::button* bn0 = crossany::ui::button::create(crossany::rect(crossany::pos2(0, 80), crossany::size(30, 30)), "ui/40.png", "ui/buttonp.png", "");
+	addChild(bn0);
 
 	//crossany::ui::button* img1 = crossany::ui::button::create(crossany::rect(crossany::pos2(80, 160), crossany::size(30, 30)), "ui/button.png", "");
 	//addChild(img1);

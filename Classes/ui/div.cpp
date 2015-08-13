@@ -45,21 +45,24 @@ void div::customdraw(){
 
 }
 
-void div::ontouchbegin(const msg* _msg){
+int32_t div::ontouchbegin(const msg* _msg){
 	node::ontouchbegin(_msg);
 	midx = 1;
 	if (midx >= mimgs.size()) midx = 0;
 	mtouchbegin = true;
+	return 1;
 }
 
-void div::ontouchend(const msg* m){
+int32_t div::ontouchend(const msg* m){
 	node::ontouchend(m);
 	midx = 0;
 	if (midx >= mimgs.size()) midx = 0;
+	return 1;
 }
 
-void div::ontouchmove(const msg* _msg){
+int32_t div::ontouchmove(const msg* _msg){
 	node::ontouchmove(_msg);
+	return 1;
 }
 
 
