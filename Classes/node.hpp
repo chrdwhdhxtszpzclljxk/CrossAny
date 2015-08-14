@@ -4,7 +4,7 @@
 
 NS_CROSSANY_BEGIN
 
-CROSSANY_API int32_t node::mh = 0;
+//CROSSANY_API int32_t node::mh = 0;
 
 node::node() : mtouchbegin(false), mparent(nullptr), mfocus(false),mfloat(left), mfill(false), mborder(1){
 }
@@ -43,7 +43,7 @@ void node::draw(){
  void node::customresize(const size& _s){ 
 	 mrc.setsize(_s);
 	 pos2 pos = mpos;
-	 pos.sety(mh - mpos.gety() - msize.geth());
+	 pos.sety(appbase::geth() - mpos.gety() - msize.geth());
 	 mrc.set(pos, msize);
  };
 

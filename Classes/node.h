@@ -43,7 +43,7 @@ namespace crossany{
 		virtual void onsetfocus(const bool&);
 		void setrect(const pos2& _p, const size& _s) { /*mrc.set(_p, _s); */ mpos = _p; msize = _s; };
 		bool mfocus;
-		static int32_t mh;
+		//static int32_t mh;
 	protected:
 		rect mrc;
 		cfloat mfloat;

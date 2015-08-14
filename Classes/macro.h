@@ -10,7 +10,7 @@
 #define USE_NS_CROSSANY_UI using namespace crossany::ui;
 
 
-#define CROSSANY_EXPORTS
+//#define CROSSANY_EXPORTS
 
 #ifdef CROSSANY_EXPORTS
 #define CROSSANY_API __declspec(dllexport)

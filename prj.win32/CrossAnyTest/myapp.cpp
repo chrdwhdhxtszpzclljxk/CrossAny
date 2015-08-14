@@ -7,6 +7,7 @@
 #include <ui/edit.h>
 #include <log.h>
 
+
 myapp::myapp(){}
 myapp::~myapp(){}
 void myapp::run(){ appbase::run(); };
