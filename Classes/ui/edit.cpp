@@ -41,8 +41,8 @@ bool edit::create(const wchar_t* _placehoder, const char* fontfile, const int32_
 							face->size->metrics.y_ppem;			// 伸缩距离到设备空间
 							face->glyph->metrics.horiAdvance;	// 水平文本排列
 							txtchar tex;
-							tex.m_Width = width;
-							tex.m_Height = height;
+							tex.mw = width;
+							tex.mh = height;
 							tex.m_adv_x = face->glyph->advance.x / 64.0f;		// 步进宽度
 							tex.m_adv_y = face->size->metrics.y_ppem;			// m_FT_Face->glyph->metrics.horiBearingY / 64.0f;
 							tex.m_delta_x = (float)bitmap_glyph->left;			// left:字形原点(0,0)到字形位图最左边象素的水平距离.它以整数象素的形式表示。 
@@ -104,13 +104,13 @@ void edit::customdraw(){
 		if (mtxtval.empty()){
 			size_t nLen = mtexplaceholder.size();
 			if (nLen > 0){
-				height = mtexplaceholder.begin()->m_Height;
+				height = mtexplaceholder.begin()->mh;
 				int w = 0, h = 0, ch_x = 0, ch_y = 0;
 				for (iter = mtexplaceholder.begin(); iter != mtexplaceholder.end(); iter++){
 					txtchar& tex = *iter;
 					glBindTexture(GL_TEXTURE_2D, tex.texid);							//绑定到目标纹理
-					w = tex.m_Width;
-					h = tex.m_Height;
+					w = tex.mw;
+					h = tex.mh;
 					ch_x = sx + tex.m_delta_x;
 					ch_y = sy + height - h - tex.m_delta_y;
 					if (maxH < h) maxH = h;

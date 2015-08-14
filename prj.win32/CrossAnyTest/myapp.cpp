@@ -21,7 +21,7 @@ bool myapp::init(){
 	//div0->create(crossany::rect(crossany::pos2(0, 80), crossany::size(30, 30)), "ui/button.png", "ui/buttonp.png", "");
 	//addChild(div0);
 	crossany::ui::label* label0 = new crossany::ui::label();
-	label0->create(L"hello", "ui\\fonts/msyh.ttf", 20);
+	label0->create(L"hello 武器就吖，ddd.Lo-_^  FT_BitmapGlyph bitmap_glyph = (FT_BitmapGlyph)glyph;", "ui\\fonts/msyh.ttf", 20);
 	addChild(label0);
 	label0->setrect(crossany::pos2(100, 200), crossany::size(500, 100));
 

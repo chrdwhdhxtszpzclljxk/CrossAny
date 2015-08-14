@@ -41,15 +41,19 @@ namespace crossany{
 		virtual int32_t ontouchend(const msg*);
 		virtual int32_t ontouchmove(const msg*);
 		virtual void onsetfocus(const bool&);
-		void setrect(const pos2& _p, const size& _s){ mrc.set(_p, _s); };
+		void setrect(const pos2& _p, const size& _s) { /*mrc.set(_p, _s); */ mpos = _p; msize = _s; };
 		bool mfocus;
+		static int32_t mh;
 	protected:
 		rect mrc;
 		cfloat mfloat;
 		bool mfill;
 		bool mtouchbegin;
+		int32_t mborder;
 	private:
 		nodez mnodes;
+		pos2 mpos;
+		size msize;
 		X_VARP(node*, parent);
 	};
 }

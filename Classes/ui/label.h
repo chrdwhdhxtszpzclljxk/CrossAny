@@ -11,18 +11,20 @@ namespace crossany{
 		public:
 			GLuint	texid;
 			wchar_t ch;
-			int     m_Width;
-			int     m_Height;
-			int     m_adv_x;
-			int     m_adv_y;
-			int     m_delta_x;
-			int     m_delta_y;
+			int32_t mw;
+			int32_t mh;
+			int32_t top;
+			int32_t m_adv_x;
+			int32_t m_adv_y;
+			int32_t m_delta_x;
+			int32_t	m_delta_y;
+			int32_t mbase;
 		public:
 			txtchar(){
 				texid = 0;
 				ch = 0;
-				m_Width = 0;
-				m_Height = 0;
+				mw = 0;
+				mh = 0;
 			}
 		};
 		class CROSSANY_API label : public node{

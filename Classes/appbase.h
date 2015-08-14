@@ -40,7 +40,7 @@ namespace crossany{
 		static void timerremove(const node*);
 		static int64_t alert(std::wstring msg, std::wstring title = L"msg", int64_t type = 0){ return 0; };
 		virtual void draw(){ orz.draw(); };
-		virtual void resize(const size& _s){ msize = _s; orz.resize(_s); };
+		virtual void resize(const size& _s) { msize = _s; orz.resize(_s); node::mh = _s.geth(); };
 
 	};
 

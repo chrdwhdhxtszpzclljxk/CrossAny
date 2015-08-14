@@ -12,14 +12,19 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CrossAnyTest", "CrossAnyTes
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_dll|Win32 = Debug_dll|Win32
 		Debug|Win32 = Debug|Win32
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{74AB0B7E-6F59-4460-B7AD-D710EA4E11EA}.Debug_dll|Win32.ActiveCfg = Debug_dll|Win32
+		{74AB0B7E-6F59-4460-B7AD-D710EA4E11EA}.Debug_dll|Win32.Build.0 = Debug_dll|Win32
 		{74AB0B7E-6F59-4460-B7AD-D710EA4E11EA}.Debug|Win32.ActiveCfg = Debug|Win32
 		{74AB0B7E-6F59-4460-B7AD-D710EA4E11EA}.Debug|Win32.Build.0 = Debug|Win32
 		{74AB0B7E-6F59-4460-B7AD-D710EA4E11EA}.Release|Win32.ActiveCfg = Release|Win32
 		{74AB0B7E-6F59-4460-B7AD-D710EA4E11EA}.Release|Win32.Build.0 = Release|Win32
+		{190E6490-19D0-4C40-8F69-08C1CBCC8603}.Debug_dll|Win32.ActiveCfg = Debug|Win32
+		{190E6490-19D0-4C40-8F69-08C1CBCC8603}.Debug_dll|Win32.Build.0 = Debug|Win32
 		{190E6490-19D0-4C40-8F69-08C1CBCC8603}.Debug|Win32.ActiveCfg = Debug|Win32
 		{190E6490-19D0-4C40-8F69-08C1CBCC8603}.Debug|Win32.Build.0 = Debug|Win32
 		{190E6490-19D0-4C40-8F69-08C1CBCC8603}.Release|Win32.ActiveCfg = Release|Win32

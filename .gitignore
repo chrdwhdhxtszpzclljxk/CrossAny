@@ -1,5 +1,6 @@
 prj.win32/CrossAny.filters
 prj.win32/Debug/
+prj.win32/Debug_dll/
 prj.win32/ipch/
 prj.win32/CrossAnyTest/Debug
 prj.win32/CrossAnyTest/ipch

@@ -147,9 +147,10 @@ int DrawGLScene(appbase* pThis){// 从这里开始进行所有的绘制
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
 	glEnable(GL_ALPHA_TEST);
+	glEnable(GL_LINE_LOOP);
 
 	pThis->draw();
-
+	glDisable(GL_LINE_LOOP);
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
@@ -388,6 +389,7 @@ void appbase::run(){
 	// 创建OpenGL窗口  
 	if (!CreateGLWindow(this,szTitle, 640, 480, 16, fullscreen)) return;// 失败退出  
 	if (init()){
+		PostMessage(appbase::hWnd, WM_SIZE,0,MAKELPARAM(640,480) );
 		while (!done){// 保持循环直到 done=TRUE  
 			painted = false;
 			if (GetMessage(&msg, NULL, 0, 0) == 0)	break;		// WM_QUIT 有消息在等待吗?  

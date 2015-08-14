@@ -28,7 +28,7 @@ namespace crossany{
 		size(const double& _w, const double& _h){ w = _w; h = _h; };
 		~size(){};
 		double getw(){ return w; }
-		double geth(){ return h; }
+		double geth()const{ return h; }
 		double setw(const double& _w){ w = _w; return w; }
 		double seth(const double& _h){ h = _h; return h; }
 		void set(const double& _w, const double& _h){ w = _w; h = _h; };
