@@ -132,7 +132,7 @@ void label::customdraw(){
 	glEnd();
 	glColor3f(1.0f, 1.0f, 1.0f);
 	*/
-	//node::customdraw();
+	node::customdraw();
 }
 
 NS_CROSSANY_UI_END
