@@ -76,7 +76,7 @@ img* img::create(const pos2& _pos, const char* path){
 			memset(&png, 0, sizeof(png));
 			png.version = PNG_IMAGE_VERSION;
 			int a= png_image_begin_read_from_file(&png, path);
-			if (a <= 0) {	OutputDebugStringA("png_image_begin_read_from_file");	}
+			//if (a <= 0) {	OutputDebugStringA("png_image_begin_read_from_file");	}
 			png.format = PNG_FORMAT_RGBA; // 按RGBA读取文件！
 			int64_t tmp = PNG_IMAGE_SAMPLE_SIZE(png.format);
 			GLint interformat = PNG_IMAGE_SAMPLE_CHANNELS(png.format);
@@ -85,7 +85,7 @@ img* img::create(const pos2& _pos, const char* path){
 			int32_t wt = png.width;
 			int32_t ht = png.height;
 			adj_w_h(wt, ht);
-			log::otprint("buffersize:%d", buffersize);
+			//log::otprint("buffersize:%d", buffersize);
 			char* buffer0 = new char[buffersize];
 			char* buffer = new char[wt * ht * 4];
 			memset(buffer, 0x00, wt*ht * 4);
@@ -96,20 +96,20 @@ img* img::create(const pos2& _pos, const char* path){
 				//}
 			}
 
-			log::otprint("png_image_finish_read:%d",a);
+			//log::otprint("png_image_finish_read:%d",a);
 			//png.opaque = 0;
 			//png_image_write_to_file(&png, "ui/test.png",0 , buffer, 0, 0);
 			sizeimg.set(wt, ht);
 			glGenTextures(1, texid);
-			errout("glGenTextures");
+			//errout("glGenTextures");
 			glBindTexture(GL_TEXTURE_2D, texid[0]);
-			errout("glBindTexture");
-			log::otprint("format:%d width:%d height:%d", interformat,wt,ht);
+			//errout("glBindTexture");
+			//log::otprint("format:%d width:%d height:%d", interformat,wt,ht);
 			glTexImage2D(GL_TEXTURE_2D, 0, interformat, wt, ht, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer); // ?????2?N??
 			//glTexSubImage2D(GL_TEXTURE_2D, 0, 200, 200, png.width, png.height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-			errout("glTexImage2D");
+			//errout("glTexImage2D");
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			errout("glTexParameteri"); GL_INVALID_ENUM; GL_MAX_TEXTURE_SIZE;
+			//errout("glTexParameteri"); GL_INVALID_ENUM; GL_MAX_TEXTURE_SIZE;
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);

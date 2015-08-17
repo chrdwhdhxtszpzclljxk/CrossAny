@@ -5,6 +5,7 @@
 #include <ftoutln.h>
 #include <fttrigon.h>
 #include "appbase.h"
+#include "../log.h"
 
 #pragma  warning(disable:4996)
 
@@ -134,11 +135,12 @@ bool label::create(const wchar_t* _txt, const char* fontfile, const int32_t font
 							FT_Glyph_To_Bitmap(&glyph, ft_render_mode_normal, 0, 1);
 							FT_BitmapGlyph bitmap_glyph = (FT_BitmapGlyph)glyph;
 							FT_Bitmap& bitmap = bitmap_glyph->bitmap;	// 取道位图数据
-							int32_t tmp =  (fontsize - face->glyph->bitmap_top);
+							int32_t tmp =  (bitmap_glyph->top - bitmap.rows);
+							log::otprint("[%C]%d - %d",ch,tmp, bitmap_glyph->top);
 							for (int32_t j = 0; j < bitmap.rows; j++){
-								int32_t lines = (fontsize - j + tmp - 2) * totalw * 4;
+								int32_t lines = (j)* totalw * 4;//(j + tmp ) * totalw * 4;//
 								for (int32_t z = 0; z < bitmap.width; z++){
-									unsigned char _vl = (z >= bitmap.width || j >= bitmap.rows) ? 0 : bitmap.buffer[z + bitmap.width*j];
+									unsigned char _vl = (z >= bitmap.width || j >= bitmap.rows) ? 0 : bitmap.buffer[z + bitmap.width*(bitmap.rows-j-1)];
 									int32_t pos1 = lines + 4 * (z + left);
 									bmpbuf[pos1 + 0] = 0xFF;
 									bmpbuf[pos1 + 1] = 0xFF;
