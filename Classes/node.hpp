@@ -17,7 +17,7 @@ node::~node(){ }
 void node::customdraw() {
 	//glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
 	if (mborder > 0) {
-		glColor3f(1.0, 0.0, 0.0);
+		glColor3f(0.0, 0.0, 1.0);
 		glPointSize(5);
 		glBegin(GL_LINE_LOOP);
 		glVertex2d(mrc.getx0() + 1, mrc.gety0() + 1);

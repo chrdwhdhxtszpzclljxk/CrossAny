@@ -34,7 +34,9 @@ namespace crossany{
 			bool create(const wchar_t* _txt,const char* fontfile,const int32_t fontsize);
 			virtual void customdraw();
 		private:
-			std::vector<txtchar> mtex;
+			//std::vector<txtchar> mtex;
+			txtchar mtex;
+			GLfloat r, g, b;
 		};
 	}
 }
