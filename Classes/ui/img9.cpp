@@ -26,46 +26,6 @@ void errout(const char* func) {
 	}
 }
 
-void adj_w_h(int32_t& w, int32_t& h) {
-	if (w < 4)
-		w = 4;
-	if (w < 8)
-		w = 8;
-	else if (w < 16)
-		w = 16;
-	else if (w < 32)
-		w = 32;
-	else if (w < 64)
-		w = 64;
-	else if (w < 128)
-		w = 128;
-	else if (w < 256)
-		w = 256;
-	else if (w < 512)
-		w = 512;
-	else if (w < 1024)
-		w = 1024;
-
-	if (h < 4)
-		h = 4;
-	if (h < 8)
-		h = 8;
-	else if (h < 16)
-		h = 16;
-	else if (h < 32)
-		h = 32;
-	else if (h < 64)
-		h = 64;
-	else if (h < 128)
-		h = 128;
-	else if (h < 256)
-		h = 256;
-	else if (h < 512)
-		h = 512;
-	else if (h < 1024)
-		h = 1024;
-}
-
 img* img::create(const pos2& _pos, const char* path){
 	img* ret = new img(); size sizeimg;
 	GLuint texid[2] = {0}; static std::map < std::string, tex* >::iterator i;
@@ -84,7 +44,7 @@ img* img::create(const pos2& _pos, const char* path){
 			int32_t buffersize = PNG_IMAGE_SIZE(png);
 			int32_t wt = png.width;
 			int32_t ht = png.height;
-			adj_w_h(wt, ht);
+			node::adj_w_h(wt, ht);
 			//log::otprint("buffersize:%d", buffersize);
 			char* buffer0 = new char[buffersize];
 			char* buffer = new char[wt * ht * 4];

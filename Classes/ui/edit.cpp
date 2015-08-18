@@ -12,6 +12,8 @@ NS_CROSSANY_BEGIN
 NS_CROSSANY_UI_BEGIN
 
 edit::edit() {
+	mwt = fixed;
+	mht = fixed;
 }
 
 edit::~edit(){
@@ -20,6 +22,8 @@ edit::~edit(){
 bool edit::create(const wchar_t* _placehoder, const char* fontfile, const int32_t& fontsize){
 	mplaceholder = _placehoder; mmaxh = 0;
 	if (mplaceholder.empty()){ mplaceholder = L"input here"; };
+	return label::create(_placehoder, fontfile, fontsize);
+	/*
 	FT_Library lib; FT_Face face; FT_Error err;  FT_ULong ch; int32_t i, count; int32_t x = 0, y = 0;
 	if (FT_Init_FreeType(&lib) == 0){
 		if ((err = FT_New_Face(lib, fontfile, 0, &face)) == 0){
@@ -28,7 +32,7 @@ bool edit::create(const wchar_t* _placehoder, const char* fontfile, const int32_
 				count = mplaceholder.length();
 				for (i = 0; i < count; i++){
 					ch = mplaceholder[i];
-					if (FT_Load_Char(face, ch, /*FT_LOAD_RENDER|*/FT_LOAD_FORCE_AUTOHINT | (TRUE ? FT_LOAD_TARGET_NORMAL : FT_LOAD_MONOCHROME | FT_LOAD_TARGET_MONO)) == 0){
+					if (FT_Load_Char(face, ch, FT_LOAD_FORCE_AUTOHINT | (TRUE ? FT_LOAD_TARGET_NORMAL : FT_LOAD_MONOCHROME | FT_LOAD_TARGET_MONO)) == 0){
 						FT_Glyph glyph;	// 得到字模
 						if (FT_Get_Glyph(face->glyph, &glyph) == 0){ // 把字形图像从字形槽复制到新的FT_Glyph对象glyph中。这个函数返回一个错误码并且设置glyph。 
 							FT_Render_Glyph(face->glyph, FT_RENDER_MODE_LCD);// FT_RENDER_MODE_NORMAL  ); //转化成位图
@@ -78,13 +82,15 @@ bool edit::create(const wchar_t* _placehoder, const char* fontfile, const int32_
 			FT_Done_Face(face);
 		}
 	}
+	*/
 	return true;
 }
 
 void edit::customdraw(){
 	int32_t sx = 0, sy = 0, maxH = 0, height = 0;
 	std::vector<txtchar>::iterator iter;
-	sx = mrc.getpos().getx(); sy = mrc.getpos().gety();
+	sx = mrc.getpos().getx(); sy = mrc.getpos().gety() + mrc.getsize().geth();
+	label::customdraw();
 	if (mfocus){ // get input focus
 		if (mcaret){
 			glDisable(GL_BLEND);
@@ -92,8 +98,8 @@ void edit::customdraw(){
 			glLineWidth(1.0f);
 			glBegin(GL_LINES);													 // 定义一个或一组原始的顶点
 			{
-				glVertex3f(sx, appbase::geth() - sy, 1.0f); // 左上角
-				glVertex3f(sx, appbase::geth() - (sy + mmaxh), 1.0f); //右上角
+				glVertex3f(sx, sy, 1.0f); // 左上角
+				glVertex3f(sx, sy + mmaxh, 1.0f); //右上角
 			}
 			glEnd();
 			glColor3f(1.0f, 1.0f, 1.0f);
@@ -132,14 +138,14 @@ void edit::customdraw(){
 			}
 		}
 	}
-	if (false && mcaret){
+	if ( mcaret){
 		glColor3f(1.0f, 0.0f, 0.0f);
 		glBegin(GL_QUADS);													 // 定义一个或一组原始的顶点
 		{
 			glVertex3f(sx, sy, 1.0f); // 左上角
 			glVertex3f(sx + mrc.getw(), sy, 1.0f); //右上角
 			glVertex3f(sx + mrc.getw(), sy + mrc.geth(), 1.0f); //右下角
-			glVertex3f(sx, sy+mrc.geth(), 1.0f); //左下角
+			glVertex3f(sx, sy + mrc.geth(), 1.0f); //左下角
 		}
 		glEnd();
 		glColor3f(1.0f, 1.0f, 1.0f);
@@ -148,7 +154,8 @@ void edit::customdraw(){
 }
 
 void edit::onsetfocus(const bool& _focus){
-	node::onsetfocus(_focus);
+	label::onsetfocus(_focus);
+	log::otprint("edit::onsetfocus: %d", int(_focus));
 	if (_focus){
 		appbase::timeradd(this);
 		mcaret = true;

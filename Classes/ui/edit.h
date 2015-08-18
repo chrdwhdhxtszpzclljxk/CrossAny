@@ -8,7 +8,7 @@
 
 namespace crossany{
 	namespace ui{
-		class CROSSANY_API edit : public node{
+		class CROSSANY_API edit : public label{
 		public:
 			edit();
 			~edit();
@@ -19,7 +19,7 @@ namespace crossany{
 		private:
 			std::wstring mplaceholder,mtxtval;
 			std::vector<txtchar> mtex,mtexplaceholder;
-			int32_t mmaxh;
+			
 			bool mcaret;
 			std::chrono::system_clock::time_point mlast;
 			

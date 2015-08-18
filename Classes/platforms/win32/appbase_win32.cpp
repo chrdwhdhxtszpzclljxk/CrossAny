@@ -359,7 +359,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {  
 		appbase::updateui();
 	}break;
 	case WM_MOUSEMOVE:{
-		pThis->onevent(uMsg, wParam, lParam);
+		//pThis->onevent(uMsg, wParam, lParam);
 	}break;
 	case WM_CHAR:{
 		wchar_t* txt = (wchar_t*)&wParam;

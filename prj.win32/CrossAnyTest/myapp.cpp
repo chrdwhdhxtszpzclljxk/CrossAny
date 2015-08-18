@@ -22,12 +22,12 @@ bool myapp::init(){
 	//div0->create(crossany::rect(crossany::pos2(0, 80), crossany::size(30, 30)), "ui/button.png", "ui/buttonp.png", "");
 	//addChild(div0);
 	crossany::ui::label* label0 = new crossany::ui::label();
-	label0->create(L"hello -_^, 武器就吖", "ui\\fonts/msyh.ttf", 20);
+	label0->create(L"hello -_^, 武器就吖", "ui\\fonts/msyh.ttf", 30);
 	addChild(label0);
-	label0->setrect(crossany::pos2(100, 200), crossany::size(500, 100));
+	label0->setrect(crossany::pos2(100, 100), crossany::size(500, 100));
 
 	crossany::ui::edit* edit0 = new crossany::ui::edit();
-	edit0->create(L"hello", "ui\\fonts/msyh.ttf", 20);
+	edit0->create(L"edit hello", "ui\\fonts/msyh.ttf", 20);
 	addChild(edit0);
 	edit0->setrect(crossany::pos2(100, 300), crossany::size(500, 100));
 

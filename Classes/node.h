@@ -22,6 +22,11 @@ namespace crossany{
 			left,
 			right
 		};
+		enum sizetype {
+			fixed, // fix size
+			fillp, // fill parent
+			matchc, // match content;
+		};
 		typedef std::list <node*> nodelist; // 本z-order的所有node列表
 		typedef std::vector <nodelist*> nodez; // 不同层次z-order的列表的集合
 		node();
@@ -43,13 +48,15 @@ namespace crossany{
 		virtual void onsetfocus(const bool&);
 		void setrect(const pos2& _p, const size& _s) { /*mrc.set(_p, _s); */ mpos = _p; msize = _s; };
 		bool mfocus;
-		//static int32_t mh;
+		static void adj_w_h(int32_t& w, int32_t& h);
 	protected:
-		rect mrc;
+		rect mrc,mrcr;
 		cfloat mfloat;
 		bool mfill;
 		bool mtouchbegin;
 		int32_t mborder;
+		int8_t mwt;
+		int8_t mht;
 	private:
 		nodez mnodes;
 		pos2 mpos;

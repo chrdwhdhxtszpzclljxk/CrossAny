@@ -12,8 +12,9 @@
 NS_CROSSANY_BEGIN
 NS_CROSSANY_UI_BEGIN
 
-label::label(){
-	
+label::label():mmaxh(0){
+	mwt = fixed;
+	mht = fixed;
 }
 
 label::~label()
@@ -105,7 +106,7 @@ bool saveBmp(char *bmpName, unsigned char  *imgBuf,
 
 
 bool label::create(const wchar_t* _txt, const char* fontfile, const int32_t fontsize){
-	FT_Library lib; FT_Face face; FT_Error err;  FT_ULong ch; int32_t i, count; int32_t x = 0, y = 0, totalw = 0, left = 0;
+	FT_Library lib; FT_Face face; FT_Error err;  FT_ULong ch; int32_t i, count; int32_t x = 0, y = 0, totalw = 0, left = 0,wt,ht,len;
 	FT_Glyph glyph;
 	if (FT_Init_FreeType(&lib) == 0){
 		if ((err = FT_New_Face(lib, fontfile, 0, &face)) == 0){
@@ -121,12 +122,21 @@ bool label::create(const wchar_t* _txt, const char* fontfile, const int32_t font
 							FT_BitmapGlyph bitmap_glyph = (FT_BitmapGlyph)glyph;
 							FT_Bitmap& bitmap = bitmap_glyph->bitmap;	// 取道位图数据
 							totalw += bitmap.width + bitmap_glyph->left;// +face->glyph->advance.x / 64.0f;;
+							if (mmaxh < bitmap.rows) mmaxh = bitmap.rows;
 						}
 					}
 				}
+				mtxtsize.setw(totalw);
+				mtxtsize.seth(fontsize);
 				totalw = (totalw + 3) / 4 * 4;
-				char* bmpbuf = new char[fontsize * (fontsize + 20) * 4 * count];
-				memset(bmpbuf, 0, fontsize * (fontsize + 20) * 4 * count);
+				wt = totalw;
+				ht = fontsize;
+				node::adj_w_h(wt, ht);
+				len = wt * ht * 4;
+				char* bmpbuf = new char[len];
+				memset(bmpbuf, 0, len);
+				int32_t height00 = -1;
+				int32_t adj = 0;
 				for (i = 0; i < count; i++){
 					ch = _txt[i];
 					if (FT_Load_Char(face, ch, /*FT_LOAD_RENDER|*/FT_LOAD_FORCE_AUTOHINT | (TRUE ? FT_LOAD_TARGET_NORMAL : FT_LOAD_MONOCHROME | FT_LOAD_TARGET_MONO)) == 0){
@@ -136,11 +146,14 @@ bool label::create(const wchar_t* _txt, const char* fontfile, const int32_t font
 							FT_BitmapGlyph bitmap_glyph = (FT_BitmapGlyph)glyph;
 							FT_Bitmap& bitmap = bitmap_glyph->bitmap;	// 取道位图数据
 							int32_t tmp =  (bitmap_glyph->top - bitmap.rows);
-							log::otprint("[%C]%d - %d",ch,tmp, bitmap_glyph->top);
+							if (tmp < 0) tmp = 0;
+							if (height00 == -1) height00 = bitmap.rows;
+							adj = height00 - bitmap.rows;
+							log::otprint("[%C] rows:%d top:%d adj:%d",ch, bitmap.rows, bitmap_glyph->top, (height00 - bitmap.rows));
 							for (int32_t j = 0; j < bitmap.rows; j++){
-								int32_t lines = (j)* totalw * 4;//(j + tmp ) * totalw * 4;//
+								int32_t lines = (j + tmp )* wt * 4;//(j + tmp ) * totalw * 4;//
 								for (int32_t z = 0; z < bitmap.width; z++){
-									unsigned char _vl = (z >= bitmap.width || j >= bitmap.rows) ? 0 : bitmap.buffer[z + bitmap.width*(bitmap.rows-j-1)];
+									unsigned char _vl = (z >= bitmap.width || j >= bitmap.rows) ? 0 : bitmap.buffer[z + bitmap.width*(bitmap.rows - j - 1 )];
 									int32_t pos1 = lines + 4 * (z + left);
 									bmpbuf[pos1 + 0] = 0xFF;
 									bmpbuf[pos1 + 1] = 0xFF;
@@ -155,8 +168,8 @@ bool label::create(const wchar_t* _txt, const char* fontfile, const int32_t font
 
 				//saveBmp("c:\\a111.bmp", (unsigned char*)bmpbuf, totalw, fontsize, 32, NULL);
 
-				mtex.mw = totalw;
-				mtex.mh = fontsize;
+				mtex.mw = wt;
+				mtex.mh = ht;
 
 				glGenTextures(1, &mtex.texid);
 				glBindTexture(GL_TEXTURE_2D, mtex.texid);
@@ -177,7 +190,8 @@ bool label::create(const wchar_t* _txt, const char* fontfile, const int32_t font
 void label::customdraw(){
 	int32_t sx = 0, height = 0;
 	std::vector<txtchar>::iterator iter;
-	sx = mrc.getpos().getx(); const int32_t sy = mrc.getpos().gety();
+	sx = mrc.getpos().getx(); int32_t sy = mrc.getpos().gety() + mrc.geth();
+	sx += 2; sy -= 1;
 	height = mtex.mh;
 	glBindTexture(GL_TEXTURE_2D, mtex.texid);							//绑定到目标纹理
 	glBegin(GL_QUADS);													 // 定义一个或一组原始的顶点
