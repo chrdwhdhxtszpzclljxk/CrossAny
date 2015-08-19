@@ -25,14 +25,16 @@ bool myapp::init(){
 	label0->create(L"hello -_^, 武器就吖", "ui\\fonts/msyh.ttf", 30);
 	addChild(label0);
 	label0->setrect(crossany::pos2(100, 100), crossany::size(500, 100));
+	label0->setborderclr(color4f(0.0f,1.0f,0.0f,1.0f));
+	label0->settxtclr(color4f(0.0f, 1.0f, 1.0f, 1.0f));
 
 	crossany::ui::edit* edit0 = new crossany::ui::edit();
-	edit0->create(L"edit hello", "ui\\fonts/msyh.ttf", 20);
+	edit0->create(L"edit hello", "ui\\fonts/msyh.ttf", 50);
 	addChild(edit0);
 	edit0->setrect(crossany::pos2(100, 300), crossany::size(500, 100));
 
-	crossany::ui::button* bn0 = crossany::ui::button::create(crossany::rect(crossany::pos2(0, 380), crossany::size(30, 30)), "ui/40.png", "ui/buttonp.png", "");
-	addChild(bn0);
+	//crossany::ui::button* bn0 = crossany::ui::button::create(crossany::rect(crossany::pos2(0, 380), crossany::size(30, 30)), "ui/40.png", "ui/buttonp.png", "");
+	//addChild(bn0);
 
 	//crossany::ui::button* img1 = crossany::ui::button::create(crossany::rect(crossany::pos2(80, 160), crossany::size(30, 30)), "ui/button.png", "");
 	//addChild(img1);

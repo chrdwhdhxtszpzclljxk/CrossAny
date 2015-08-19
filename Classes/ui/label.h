@@ -11,8 +11,8 @@ namespace crossany{
 		public:
 			GLuint	texid;
 			wchar_t ch;
-			int32_t mw;
-			int32_t mh;
+			int32_t mw,mwr;
+			int32_t mh,mhr;
 			int32_t top;
 			int32_t m_adv_x;
 			int32_t m_adv_y;

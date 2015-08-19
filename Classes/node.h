@@ -16,6 +16,11 @@
 #pragma warning(disable:4251)
 namespace crossany{
 	class msg;
+	class CROSSANY_API color4f {
+	public:
+		color4f(GLfloat r, GLfloat g, GLfloat b, GLfloat t);
+		GLfloat mr, mg, mb, mt;
+	};
 	class CROSSANY_API node{
 	public:
 		enum cfloat {
@@ -47,6 +52,8 @@ namespace crossany{
 		virtual int32_t ontouchmove(const msg*);
 		virtual void onsetfocus(const bool&);
 		void setrect(const pos2& _p, const size& _s) { /*mrc.set(_p, _s); */ mpos = _p; msize = _s; };
+		void setborderclr(const color4f& clr);
+		void settxtclr(const color4f& clr);
 		bool mfocus;
 		static void adj_w_h(int32_t& w, int32_t& h);
 	protected:
@@ -55,6 +62,8 @@ namespace crossany{
 		bool mfill;
 		bool mtouchbegin;
 		int32_t mborder;
+		color4f mborderclr;
+		color4f mtxtclr;
 		int8_t mwt;
 		int8_t mht;
 	private:

@@ -99,10 +99,10 @@ void img::customdraw(){
 	glColor4f(1.0f, 1.0f, 1.0f,1.0f); // 清除当前颜色。不然tex会变色。
 	glBegin(GL_QUADS);
 	// 0.0是纹理的左侧，0.5是纹理的中点，1.0是纹理的右侧 . 0.0是纹理的底部，0.5是纹理的中点，1.0是纹理的顶部。
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(mrc.getx0(), appbase::geth() - mrc.gety0(), 1.0f);//左下角
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(mrc.getx1(), appbase::geth() - mrc.gety1(), 1.0f);//左上角
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(mrc.getx2(), appbase::geth() - mrc.gety2(), 1.0f);//右上角
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(mrc.getx3(), appbase::geth() - mrc.gety3(), 1.0f);//右下角
+	//glTexCoord2f(0.0f, 0.0f); glVertex3f(mrc.getleft(), appbase::geth() - mrc.gety0(), 1.0f);//左下角
+	//glTexCoord2f(0.0f, 1.0f); glVertex3f(mrc.getx1(), appbase::geth() - mrc.gety1(), 1.0f);//左上角
+	//glTexCoord2f(1.0f, 1.0f); glVertex3f(mrc.getx2(), appbase::geth() - mrc.gety2(), 1.0f);//右上角
+	//glTexCoord2f(1.0f, 0.0f); glVertex3f(mrc.getx3(), appbase::geth() - mrc.gety3(), 1.0f);//右下角
 	glEnd();
 	//glDisable(GL_ALPHA_TEST); 
 	//glDisable(GL_BLEND);   

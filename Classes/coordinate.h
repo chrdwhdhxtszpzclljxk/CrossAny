@@ -47,17 +47,17 @@ namespace crossany{
 		~rect(){};
 		double getw(){ return msize.getw(); };
 		double geth(){ return msize.geth(); };
-		double getx0(){ return mpos.getx(); };  // (left,bottom)
-		double gety0(){ return mpos.gety(); };
-		double getx1(){ return mpos.getx(); }; 
-		double gety1(){ return mpos.gety() + msize.geth(); };
-		double getx2(){ return mpos.getx() + msize.getw(); }; 
-		double gety2(){ return mpos.gety() + msize.geth(); };
-		double getx3(){ return mpos.getx() + msize.getw(); };
-		double gety3(){ return mpos.gety(); };
+		double getleft(){ return mpos.getx(); };  // (left,bottom)
+		double gettop(){ return mpos.gety(); };
+		//double getx1(){ return mpos.getx(); }; 
+		double getbottom(){ return mpos.gety() + msize.geth(); };
+		double getright(){ return mpos.getx() + msize.getw(); }; 
+		//double gety2(){ return mpos.gety() + msize.geth(); };
+		//double getx3(){ return mpos.getx() + msize.getw(); };
+		//double gety3(){ return mpos.gety(); };
 		const pos2 getpos()const { return mpos; };
 		const size getsize()const { return msize; };
-		bool ptinrect(const pos2& _p){ if (_p.getx() >= getx0() && _p.getx() <= getx2() && _p.gety() >= gety0() && _p.gety() <= gety2()) return true; return false; };
+		bool ptinrect(const pos2& _p);// { if (_p.getx() >= getx0() && _p.getx() <= getx2() && _p.gety() >= gety0() && _p.gety() <= gety2()) return true; return false; };
 		void set(const pos2& _pos, const size& _size){ mpos = _pos; msize = _size; };
 		void setsize(const size& _size) { msize = _size; };
 		bool operator== (const rect& ar) const{ return mpos == ar.mpos && msize == ar.msize; };

@@ -4,16 +4,26 @@
 
 NS_CROSSANY_BEGIN
 
-//CROSSANY_API int32_t node::mh = 0;
-
-node::node() : mtouchbegin(false), mparent(nullptr), mfocus(false),mfloat(left), mfill(false), mborder(1),mwt(fillp),mht(fillp){
+color4f::color4f(GLfloat r, GLfloat g, GLfloat b, GLfloat t):mr(r),mg(g),mb(b),mt(t){
 }
 
-node::node(node* _p) : mtouchbegin(false), mparent(_p), mfocus(false),mfloat(left), mfill(false), mborder(1), mwt(fillp), mht(fillp) {
+node::node() : mtouchbegin(false), mparent(nullptr), mfocus(false),mfloat(left), mfill(false), mborder(1),mwt(fillp),mht(fillp),mborderclr(1.0f,0.0f,0.0f,1.0f)
+, mtxtclr(1.0f,0.0f,0.0f,1.0f){
+}
+
+node::node(node* _p) : mtouchbegin(false), mparent(_p), mfocus(false),mfloat(left), mfill(false), mborder(1), mwt(fillp), mht(fillp), mborderclr(1.0f, 0.0f, 0.0f, 1.0f)
+, mtxtclr(1.0f, 0.0f, 0.0f, 1.0f) {
 }
 
 node::~node(){ }
 
+void node::setborderclr(const color4f & clr) {
+	mborderclr = clr;
+}
+
+void node::settxtclr(const color4f & clr) {
+	mtxtclr = clr;
+}
 
 void node::adj_w_h(int32_t& w, int32_t& h) {
 	if (w < 4)
@@ -58,17 +68,20 @@ void node::adj_w_h(int32_t& w, int32_t& h) {
 
 void node::customdraw() {
 	//glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+	if (mparent == nullptr) return;
 	if (mborder > 0) {
-		glColor3f(0.0, 0.0, 1.0);
-		glPointSize(5);
+		//glClear(GL_COLOR_BUFFER_BIT);
+		glColor4f(mborderclr.mr,mborderclr.mg,mborderclr.mb,mborderclr.mt);
+		glLineWidth(1);
 		glBegin(GL_LINE_LOOP);
-		glVertex2d(mrc.getx0() - 1, mrc.gety0() - 1);
-		glVertex2d(mrc.getx1() - 1, mrc.gety1() + 1);
-		glVertex2d(mrc.getx2() + 1, mrc.gety2() + 1);
-		glVertex2d(mrc.getx3() + 1, mrc.gety3() - 1);
-		//log::otprint("(%f,%f),(%f,%f),(%f,%f),(%f,%f)", mrc.getx0(), mrc.gety0(), mrc.getx1(), mrc.gety1(),
-		//	mrc.getx2(), mrc.gety2(), mrc.getx3(), mrc.gety3());
+		glVertex2d(mrc.getleft() - 1, mrc.gettop() - 1);
+		glVertex2d(mrc.getleft() - 1, mrc.getbottom() + 1);
+		glVertex2d(mrc.getright() + 1, mrc.getbottom() + 1);
+		glVertex2d(mrc.getright() + 1, mrc.gettop() - 1);
+		log::otprint("(%f,%f),(%f,%f),(%f,%f),(%f,%f)", mrc.getleft(), mrc.gettop(), mrc.getright(), mrc.gettop(),
+			mrc.getright(), mrc.getbottom(), mrc.getleft(), mrc.getbottom());
 		glEnd();
+		glFlush();
 	}
 }
 

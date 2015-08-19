@@ -314,6 +314,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {  
 		if (!HIWORD(wParam)) active = TRUE;// 检查最小化状态  // 程序处于激活状态  
 		else active = FALSE;// 程序不再激活  
 		OutputDebugString(L"WM_ACTIVATE\r\n");
+		appbase::updateui();
 		return 0;// 返回消息循环  
 	}break;
 	case WM_SYSCOMMAND:{// 中断系统命令Intercept System Commands  
@@ -346,6 +347,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {  
 		int32_t h = HIWORD(lParam);
 		ReSizeGLScene(pThis,w, h);
 		pThis->resize(crossany::size(w, h));
+		appbase::updateui();
 		return 0;
 	}break;
 	case WM_LBUTTONUP:{

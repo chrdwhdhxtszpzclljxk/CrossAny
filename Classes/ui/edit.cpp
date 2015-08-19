@@ -20,9 +20,10 @@ edit::~edit(){
 }
 
 bool edit::create(const wchar_t* _placehoder, const char* fontfile, const int32_t& fontsize){
-	mplaceholder = _placehoder; mmaxh = 0;
+	mplaceholder = _placehoder;// mmaxh = 0;
 	if (mplaceholder.empty()){ mplaceholder = L"input here"; };
-	return label::create(_placehoder, fontfile, fontsize);
+	return true;
+	//return label::create(_placehoder, fontfile, fontsize);
 	/*
 	FT_Library lib; FT_Face face; FT_Error err;  FT_ULong ch; int32_t i, count; int32_t x = 0, y = 0;
 	if (FT_Init_FreeType(&lib) == 0){
@@ -90,7 +91,8 @@ void edit::customdraw(){
 	int32_t sx = 0, sy = 0, maxH = 0, height = 0;
 	std::vector<txtchar>::iterator iter;
 	sx = mrc.getpos().getx(); sy = mrc.getpos().gety() + mrc.getsize().geth();
-	label::customdraw();
+	node::customdraw();
+	/*
 	if (mfocus){ // get input focus
 		if (mcaret){
 			glDisable(GL_BLEND);
@@ -138,23 +140,11 @@ void edit::customdraw(){
 			}
 		}
 	}
-	if ( mcaret){
-		glColor3f(1.0f, 0.0f, 0.0f);
-		glBegin(GL_QUADS);													 // 定义一个或一组原始的顶点
-		{
-			glVertex3f(sx, sy, 1.0f); // 左上角
-			glVertex3f(sx + mrc.getw(), sy, 1.0f); //右上角
-			glVertex3f(sx + mrc.getw(), sy + mrc.geth(), 1.0f); //右下角
-			glVertex3f(sx, sy + mrc.geth(), 1.0f); //左下角
-		}
-		glEnd();
-		glColor3f(1.0f, 1.0f, 1.0f);
-	}
-
+	*/
 }
 
 void edit::onsetfocus(const bool& _focus){
-	label::onsetfocus(_focus);
+	node::onsetfocus(_focus);
 	log::otprint("edit::onsetfocus: %d", int(_focus));
 	if (_focus){
 		appbase::timeradd(this);

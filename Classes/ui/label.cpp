@@ -128,9 +128,11 @@ bool label::create(const wchar_t* _txt, const char* fontfile, const int32_t font
 				}
 				mtxtsize.setw(totalw);
 				mtxtsize.seth(fontsize);
-				totalw = (totalw + 3) / 4 * 4;
+				//totalw = (totalw + 3) / 4 * 4;
 				wt = totalw;
 				ht = fontsize;
+				mtex.mwr = wt;
+				mtex.mhr = ht;
 				node::adj_w_h(wt, ht);
 				len = wt * ht * 4;
 				char* bmpbuf = new char[len];
@@ -191,8 +193,9 @@ void label::customdraw(){
 	int32_t sx = 0, height = 0;
 	std::vector<txtchar>::iterator iter;
 	sx = mrc.getpos().getx(); int32_t sy = mrc.getpos().gety() + mrc.geth();
-	sx += 2; sy -= 1;
+	//sx += 2; sy -= 1;
 	height = mtex.mh;
+	glColor4f(mtxtclr.mr, mtxtclr.mg, mtxtclr.mb, mtxtclr.mt);
 	glBindTexture(GL_TEXTURE_2D, mtex.texid);							//绑定到目标纹理
 	glBegin(GL_QUADS);													 // 定义一个或一组原始的顶点
 	// 左上角
