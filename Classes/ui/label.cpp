@@ -190,6 +190,7 @@ bool label::create(const wchar_t* _txt, const char* fontfile, const int32_t font
 }
 
 void label::customdraw(){
+	
 	int32_t sx = 0, height = 0;
 	std::vector<txtchar>::iterator iter;
 	sx = mrc.getpos().getx(); int32_t sy = mrc.getpos().gety() + mrc.geth();
@@ -199,15 +200,15 @@ void label::customdraw(){
 	glBindTexture(GL_TEXTURE_2D, mtex.texid);							//绑定到目标纹理
 	glBegin(GL_QUADS);													 // 定义一个或一组原始的顶点
 	// 左上角
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(sx, sy, 1.0f);
+	glTexCoord2f(0.5f, 1.0f); glVertex3f(sx, sy, 1.0f);
 	// 右上角
 	glTexCoord2f(1.0f, 1.0f); glVertex3f(sx + mtex.mw, sy, 1.0f);
 	// 右下角
 	glTexCoord2f(1.0f, 0.0f); glVertex3f(sx + mtex.mw, sy - mtex.mh, 1.0f);
 	// 左下角
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(sx, sy - mtex.mh, 1.0f);
+	glTexCoord2f(0.5f, 0.0f); glVertex3f(sx, sy - mtex.mh, 1.0f);
 	glEnd();
-
+	glFlush();
 	node::customdraw();
 }
 

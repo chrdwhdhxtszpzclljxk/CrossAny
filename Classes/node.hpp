@@ -78,8 +78,8 @@ void node::customdraw() {
 		glVertex2d(mrc.getleft() - 1, mrc.getbottom() + 1);
 		glVertex2d(mrc.getright() + 1, mrc.getbottom() + 1);
 		glVertex2d(mrc.getright() + 1, mrc.gettop() - 1);
-		log::otprint("(%f,%f),(%f,%f),(%f,%f),(%f,%f)", mrc.getleft(), mrc.gettop(), mrc.getright(), mrc.gettop(),
-			mrc.getright(), mrc.getbottom(), mrc.getleft(), mrc.getbottom());
+		//log::otprint("(%f,%f),(%f,%f),(%f,%f),(%f,%f)", mrc.getleft(), mrc.gettop(), mrc.getright(), mrc.gettop(),
+		//	mrc.getright(), mrc.getbottom(), mrc.getleft(), mrc.getbottom());
 		glEnd();
 		glFlush();
 	}
