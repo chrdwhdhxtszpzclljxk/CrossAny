@@ -133,6 +133,8 @@ bool label::create(const wchar_t* _txt, const char* fontfile, const int32_t font
 				ht = fontsize;
 				mtex.mwr = wt;
 				mtex.mhr = ht;
+				mbmp.mwo = wt;
+				mbmp.mho = ht;
 				node::adj_w_h(wt, ht);
 				len = wt * ht * 4;
 				char* bmpbuf = new char[len];
@@ -173,14 +175,25 @@ bool label::create(const wchar_t* _txt, const char* fontfile, const int32_t font
 				mtex.mw = wt;
 				mtex.mh = ht;
 
-				glGenTextures(1, &mtex.texid);
-				glBindTexture(GL_TEXTURE_2D, mtex.texid);
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mtex.mw, mtex.mh, 0, GL_RGBA, GL_UNSIGNED_BYTE, bmpbuf);  //指定一个二维的纹理图片
+				//glGenTextures(1, &mtex.texid);
+				//glBindTexture(GL_TEXTURE_2D, mtex.texid);
+				//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mtex.mw, mtex.mh, 0, GL_RGBA, GL_UNSIGNED_BYTE, bmpbuf);  //指定一个二维的纹理图片
+				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);							   //glTexParameteri():纹理过滤
+				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				//glTexEnvi(GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_KEEP);								//纹理进行混合
+				mbmp.mw = wt;
+				mbmp.mh = ht;
+				glGenTextures(1, &mbmp.id);
+				glBindTexture(GL_TEXTURE_2D, mbmp.id);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mbmp.mw, mbmp.mh, 0, GL_RGBA, GL_UNSIGNED_BYTE, bmpbuf);  //指定一个二维的纹理图片
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);							   //glTexParameteri():纹理过滤
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 				glTexEnvi(GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_KEEP);								//纹理进行混合
+
 				delete[] bmpbuf;
 			}
 			FT_Done_Face(face);
@@ -194,7 +207,7 @@ void label::customdraw(){
 	int32_t sx = 0, height = 0;
 	std::vector<txtchar>::iterator iter;
 	sx = mrc.getpos().getx(); int32_t sy = mrc.getpos().gety() + mrc.geth();
-	//sx += 2; sy -= 1;
+	/*
 	height = mtex.mh;
 	glColor4f(mtxtclr.mr, mtxtclr.mg, mtxtclr.mb, mtxtclr.mt);
 	glBindTexture(GL_TEXTURE_2D, mtex.texid);							//绑定到目标纹理
@@ -208,7 +221,23 @@ void label::customdraw(){
 	// 左下角
 	glTexCoord2f(0.5f, 0.0f); glVertex3f(sx, sy - mtex.mh, 1.0f);
 	glEnd();
-	glFlush();
+	*/
+	height = mbmp.mh;
+	glColor4f(mtxtclr.mr, mtxtclr.mg, mtxtclr.mb, mtxtclr.mt);
+	glBindTexture(GL_TEXTURE_2D, mbmp.id);							//绑定到目标纹理
+	glBegin(GL_QUADS);													 // 定义一个或一组原始的顶点
+	GLfloat ly = (GLfloat)mbmp.mho / (GLfloat)mbmp.mh + 0.01f;
+	GLfloat rx = (GLfloat)mbmp.mwo / (GLfloat)mbmp.mw + 0.01f;
+	GLfloat tt = (mrc.geth() - mbmp.mho) / 2.0f;
+	GLfloat lt = (mrc.getw() - mbmp.mwo) / 2.0f;
+	
+	glTexCoord2f(0.0f, ly); glVertex3f(sx + lt, sy - tt, 1.0f); // 左上角
+	glTexCoord2f(rx, 1.0f); glVertex3f(sx + lt + mbmp.mwo, sy - tt, 1.0f);// 右上角
+	glTexCoord2f(rx, 0.0f); glVertex3f(sx + lt + mbmp.mwo, sy - mbmp.mho - tt, 1.0f);// 右下角
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(sx + lt, sy - mbmp.mho - tt, 1.0f);// 左下角
+	glEnd();
+
+
 	node::customdraw();
 }
 

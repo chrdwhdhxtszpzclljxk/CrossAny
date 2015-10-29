@@ -7,6 +7,17 @@
 
 namespace crossany{
 	namespace ui{
+		class CROSSANY_API bmptex{
+		public :
+			GLuint id;
+			int32_t mw, mh;	// 
+			int32_t mwo, mho; // the output draw width,height.
+		public:
+			bmptex() {
+				mw = mh = mwo = mho = 0;
+				id = 0;
+			}
+		};
 		class CROSSANY_API txtchar{
 		public:
 			GLuint	texid;
@@ -37,6 +48,7 @@ namespace crossany{
 			int32_t mmaxh;
 		private:
 			txtchar mtex;
+			bmptex mbmp;
 			size mtxtsize;
 			GLfloat r, g, b;
 		};

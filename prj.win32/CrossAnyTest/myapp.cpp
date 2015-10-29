@@ -24,7 +24,7 @@ bool myapp::init(){
 	crossany::ui::label* label0 = new crossany::ui::label();
 	label0->create(L"hello -_^, 武器就吖", "ui\\fonts/msyh.ttf", 50);
 	addChild(label0);
-	label0->setrect(crossany::pos2(100, 100), crossany::size(500, 100));
+	label0->setrect(crossany::pos2(100, 100), crossany::size(500, 120));
 	label0->setborderclr(color4f(1.0f,0.0f,0.0f,1.0f));
 	label0->settxtclr(color4f(0.0f, 1.0f, 0.0f, 1.0f));
 
