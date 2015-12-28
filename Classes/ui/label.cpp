@@ -108,6 +108,7 @@ bool saveBmp(char *bmpName, unsigned char  *imgBuf,
 bool label::create(const wchar_t* _txt, const char* fontfile, const int32_t fontsize){
 	FT_Library lib; FT_Face face; FT_Error err;  FT_ULong ch; int32_t i, count; int32_t x = 0, y = 0, totalw = 0, left = 0,wt,ht,len;
 	FT_Glyph glyph;
+	mmaxh = 0;
 	if (FT_Init_FreeType(&lib) == 0){
 		if ((err = FT_New_Face(lib, fontfile, 0, &face)) == 0){
 			if (FT_Select_Charmap(face, FT_ENCODING_UNICODE) == 0){
@@ -123,14 +124,15 @@ bool label::create(const wchar_t* _txt, const char* fontfile, const int32_t font
 							FT_Bitmap& bitmap = bitmap_glyph->bitmap;	// 取道位图数据
 							totalw += bitmap.width + bitmap_glyph->left;// +face->glyph->advance.x / 64.0f;;
 							if (mmaxh < bitmap.rows) mmaxh = bitmap.rows;
+							log::otprint("%C w:%d h:%d",ch,bitmap.width,bitmap.rows);
 						}
 					}
 				}
 				mtxtsize.setw(totalw);
-				mtxtsize.seth(fontsize);
+				mtxtsize.seth(mmaxh); (fontsize);
 				//totalw = (totalw + 3) / 4 * 4;
 				wt = totalw;
-				ht = fontsize;
+				ht = mmaxh;//fontsize;
 				mtex.mwr = wt;
 				mtex.mhr = ht;
 				mbmp.mwo = wt;
@@ -153,7 +155,7 @@ bool label::create(const wchar_t* _txt, const char* fontfile, const int32_t font
 							if (tmp < 0) tmp = 0;
 							if (height00 == -1) height00 = bitmap.rows;
 							adj = height00 - bitmap.rows;
-							log::otprint("[%C] rows:%d top:%d adj:%d",ch, bitmap.rows, bitmap_glyph->top, (height00 - bitmap.rows));
+							log::otprint("[%C] rows:%d top:%d adj:%d maxh:%d",ch, bitmap.rows, bitmap_glyph->top, (height00 - bitmap.rows), mmaxh);
 							for (int32_t j = 0; j < bitmap.rows; j++){
 								int32_t lines = (j + tmp )* wt * 4;//(j + tmp ) * totalw * 4;//
 								for (int32_t z = 0; z < bitmap.width; z++){
