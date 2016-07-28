@@ -8,7 +8,7 @@
 
 namespace crossany{
 	namespace ui{
-		class CROSSANY_API edit : public node{
+		class edit : public node{
 		public:
 			edit();
 			~edit();

@@ -7,7 +7,7 @@
 
 namespace crossany{
 	namespace log{
-		CROSSANY_API int32_t otprint(const char* fmt, ...);
+		int32_t otprint(const char* fmt, ...);
 	}
 }
 #endif

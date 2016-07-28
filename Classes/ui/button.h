@@ -8,7 +8,7 @@
 //NS_CROSSANY_BEGIN
 namespace crossany{
 	namespace ui{
-		class CROSSANY_API button :public node{
+		class button :public node{
 		private:
 			button();
 			~button();

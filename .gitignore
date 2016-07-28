@@ -5,6 +5,7 @@ prj.win32/ipch/
 prj.win32/CrossAnyTest/Debug
 prj.win32/CrossAnyTest/exe_dll
 prj.win32/CrossAnyTest/ipch
+prj.win32/CrossAnyShell/Debug/
 third_lib/lpng1617/projects/vstudio/Debug/
 third_lib/lpng1617/projects/vstudio/Release/
 third_lib/lpng1617/projects/vstudio/ipch/

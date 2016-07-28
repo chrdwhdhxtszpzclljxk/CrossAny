@@ -6,7 +6,7 @@
 
 namespace crossany{
 	namespace ui{
-		class CROSSANY_API div : public node{
+		class div : public node{
 		public:
 			div();
 			~div();

@@ -10,7 +10,7 @@
 //NS_CROSSANY_BEGIN
 
 namespace crossany{
-	class CROSSANY_API appbase{
+	class appbase{
 	public:
 		
 		static void updateui();

@@ -6,7 +6,7 @@
 //NS_CROSSANY_BEGIN
 namespace crossany{
 
-	class CROSSANY_API glview{
+	class glview{
 	private:
 		glview();
 		~glview();

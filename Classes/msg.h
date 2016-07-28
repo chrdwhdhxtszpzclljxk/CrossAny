@@ -9,7 +9,7 @@
 //NS_CROSSANY_BEGIN
 namespace crossany{
 	
-	class CROSSANY_API msg{
+	class msg{
 	public:
 		msg(const pos2&, node*, node* from);
 		~msg();

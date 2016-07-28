@@ -16,12 +16,12 @@
 #pragma warning(disable:4251)
 namespace crossany{
 	class msg;
-	class CROSSANY_API color4f {
+	class color4f {
 	public:
 		color4f(GLfloat r, GLfloat g, GLfloat b, GLfloat t);
 		GLfloat mr, mg, mb, mt;
 	};
-	class CROSSANY_API node{
+	class node{
 	public:
 		enum cfloat {
 			left,

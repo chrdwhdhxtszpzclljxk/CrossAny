@@ -7,7 +7,7 @@
 
 namespace crossany{
 	namespace ui{
-		class CROSSANY_API bmptex{
+		class bmptex{
 		public :
 			GLuint id;
 			int32_t mw, mh;	// 
@@ -18,7 +18,7 @@ namespace crossany{
 				id = 0;
 			}
 		};
-		class CROSSANY_API txtchar{
+		class txtchar{
 		public:
 			GLuint	texid;
 			wchar_t ch;
@@ -38,7 +38,7 @@ namespace crossany{
 				mh = 0;
 			}
 		};
-		class CROSSANY_API label : public node{
+		class label : public node{
 		public:
 			label();
 			~label();
