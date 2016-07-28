@@ -21,3 +21,5 @@ prj.win32/CrossAny.suo
 *.ipch
 *.pdb
 *.opensdf
+*.db
+prj.win32/CrossAny.VC.VC.opendb
